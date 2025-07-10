@@ -1,57 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/dashboard.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/dashboard.css" />
     <title>BUCKETLIST - Dashboard</title>
-    <script src="../dist/pages/dashboard.js" defer></script>
-</head>
+    <script type="module" src="../dist/pages/dashboard.js"></script>
+  </head>
 
-<body>
+  <body>
     <header>
-        <section class="header-top">
-            <h1>Översikt</h1>
-            <a href="settings.html">
-                <img src="../assets/images/cog_settings.png" width="20" height="20">
-            </a>
-        </section>
-        <figure>
-            <img src="https://picsum.photos/id/823/175/175" alt="profile images">
-        </figure>
-        <p>Välkommen, <span id="user-name">NAMN</span></p>
+      <section class="header-top">
+        <h1>Översikt</h1>
+        <a href="settings.html">
+          <img src="../assets/images/cog_settings.png" width="20" height="20" />
+        </a>
+      </section>
+      <figure>
+        <img src="https://picsum.photos/id/823/175/175" alt="profile images" />
+      </figure>
+      <p>Välkommen, <span id="user-name">NAMN</span></p>
     </header>
     <main>
-        <h2>Dags att nå dina <span class="dream-theme">drömmar!</span></h2>
-        <section>
-            <div class="list-heading">
-                <h4>Bucketlist:</h4>
-                <a href="add-dream.html">
-                    <img src="../assets/images/plussign_circled.png" alt="plus sign">
-                </a>
-            </div>
-            <ul class="dream-list">
-                <li class="dream-list_item">
-                    <input class="dream-check" type="checkbox" name="dream-check" id="dream-check-1" checked>
-                    <label for="dream-check-1">Lära mig HTML/CSS, <span class="dream-theme">teknikdrömmar</span></label>
-                    <button type="button"><img src="../assets/images/trash_delete.png"></button>
-                </li>
-                <li class="dream-list_item">
-                    <input class="dream-check" type="checkbox" name="dream-check" id="dream-check-2">
-                    <label for="dream-check-2">Lära mig TypeScript, <span
-                            class="dream-theme">teknikdrömmar</span></label>
-                    <button type="button"><img src="../assets/images/trash_delete.png"></button>
-                </li>
-                <li class="dream-list_item">
-                    <input class="dream-check" type="checkbox" name="dream-check" id="dream-check-3">
-                    <label for="dream-check-3">En dröm som tar flera rader lorem ipsum, <span
-                            class="dream-theme">vardagsdrömmar</span></label>
-                    <button type="button"><img src="../assets/images/trash_delete.png"></button>
-                </li>
-            </ul>
-        </section>
+      <h2>Dags att nå dina <span class="dream-theme">drömmar!</span></h2>
+      <section>
+        <div class="list-heading">
+          <h4>Bucketlist:</h4>
+          <a href="add-dream.html">
+            <img src="../assets/images/plussign_circled.png" alt="plus sign" />
+          </a>
+        </div>
+        <ul class="dream-list">
+          <li class="dream-list_item">
+            <input
+              class="dream-check"
+              type="checkbox"
+              name="dream-check"
+              id="dream-check-1"
+              checked
+            />
+            <label for="dream-check-1"
+              >Lära mig HTML/CSS,
+              <span class="dream-theme">teknikdrömmar</span></label
+            >
+            <button type="button">
+              <img src="../assets/images/trash_delete.png" />
+            </button>
+          </li>
+          <li class="dream-list_item">
+            <input
+              class="dream-check"
+              type="checkbox"
+              name="dream-check"
+              id="dream-check-2"
+            />
+            <label for="dream-check-2"
+              >Lära mig TypeScript,
+              <span class="dream-theme">teknikdrömmar</span></label
+            >
+            <button type="button">
+              <img src="../assets/images/trash_delete.png" />
+            </button>
+          </li>
+          <li class="dream-list_item">
+            <input
+              class="dream-check"
+              type="checkbox"
+              name="dream-check"
+              id="dream-check-3"
+            />
+            <label for="dream-check-3"
+              >En dröm som tar flera rader lorem ipsum,
+              <span class="dream-theme">vardagsdrömmar</span></label
+            >
+            <button type="button">
+              <img src="../assets/images/trash_delete.png" />
+            </button>
+          </li>
+        </ul>
+      </section>
     </main>
-</body>
-
+  </body>
 </html>
