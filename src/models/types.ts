@@ -4,3 +4,12 @@ export interface Dream {
   theme: string;
   checked: boolean;
 }
+
+// Editable array of literal types (use with type T = typeof themes[number])
+export const themes = [
+  "teknikdrömmar",
+  "vardagsdrömmar",
+  "husdrömmar",
+  "sportdrömmar",
+  "resdrömmar",
+] as const;
