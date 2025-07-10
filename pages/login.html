@@ -1,49 +1,79 @@
 <!DOCTYPE html>
 <html lang="sv">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/login.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/login.css" />
     <title>BUCKETLIST - Logga in</title>
-    <script src="../dist/pages/login.js" defer></script>
-</head>
+    <script type="module" src="../dist/pages/login.js"></script>
+  </head>
 
-<body>
+  <body>
     <header>
-        <figure>
-            <img src="../assets/images/bucketlistlogo.png" class="splash-logo" alt="Bucket Lists logga" />
-        </figure>
-        <h1>Välkommen!</h1>
+      <figure>
+        <img
+          src="../assets/images/bucketlistlogo.png"
+          class="splash-logo"
+          alt="Bucket Lists logga"
+        />
+      </figure>
+      <h1>Välkommen!</h1>
     </header>
     <main>
-        <article>
-            <h2>Logga in</h2>
-            <form>
-                <label for="username">Namn</label>
-                <input type="text" id="username" name="username" placeholder="Ditt användarnamn" aria-describedby="username-error-message">
+      <article>
+        <h2>Logga in</h2>
+        <form>
+          <label for="username">Namn</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Ditt användarnamn"
+            aria-describedby="username-error-message"
+          />
 
-                <p id="username-error-message" class="error-message" role="alert" style="display: none;">Vänligen ange
-                    ditt användarnamn.</p>
-                <label for="password">Lösenord</label>
-                <div class="password-wrapper">
-                    <input type="password" id="password" name="password" placeholder="Ditt lösenord" aria-describedby="password-error-message">
-                    <button type="button" class="toggle-password"><img src="../assets/images/eye-icon.png"
-                            alt="Växla lösenords synlighet" /></button>
-                </div>
-                <p id="password-error-message" class="error-message" role="alert" style="display: none;">Vänligen ange
-                    ditt lösenord.</p>
+          <p
+            id="username-error-message"
+            class="error-message"
+            role="alert"
+            style="display: none"
+          >
+            Vänligen ange ditt användarnamn.
+          </p>
+          <label for="password">Lösenord</label>
+          <div class="password-wrapper">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Ditt lösenord"
+              aria-describedby="password-error-message"
+            />
+            <button type="button" class="toggle-password">
+              <img
+                src="../assets/images/eye-icon.png"
+                alt="Växla lösenords synlighet"
+              />
+            </button>
+          </div>
+          <p
+            id="password-error-message"
+            class="error-message"
+            role="alert"
+            style="display: none"
+          >
+            Vänligen ange ditt lösenord.
+          </p>
 
-                <a href="#">Glömt lösenord?</a>
-                <div class="remember">
-                    <input type="checkbox" id="remember" name="remember">
-                    <label for="remember">Kom ihåg mig</label>
-                </div>
+          <a href="#">Glömt lösenord?</a>
+          <div class="remember">
+            <input type="checkbox" id="remember" name="remember" />
+            <label for="remember">Kom ihåg mig</label>
+          </div>
 
-                <button type="submit">Logga in</button>
-            </form>
-        </article>
+          <button type="submit">Logga in</button>
+        </form>
+      </article>
     </main>
-</body>
-
+  </body>
 </html>

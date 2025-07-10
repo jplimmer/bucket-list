@@ -1,46 +1,77 @@
 <!DOCTYPE html>
 <html lang="sv">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/add-dream.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/add-dream.css" />
     <title>BUCKETLIST - Nytt mål</title>
-    <script src="../dist/pages/AddDream.js" defer></script>
-</head>
+    <script type="module" src="../dist/pages/AddDream.js"></script>
+  </head>
 
-<body>
+  <body>
     <header>
-        <section class="header-top">
-            <h1>Nytt mål</h1>
-            <a href="dashboard.html">
-                <img src="../assets/images/cross_close.png" width="15" height="15" alt="Gå tillbaka till översikten">
-            </a>
-        </section>
-        <figure>
-            <img src="https://picsum.photos/id/823/175/175" alt="Användarens profilbild">
-        </figure>
-        <p>Fortsätt drömma, <span id="user-name">NAMN</span>!</p>
+      <section class="header-top">
+        <h1>Nytt mål</h1>
+        <a href="dashboard.html">
+          <img
+            src="../assets/images/cross_close.png"
+            width="15"
+            height="15"
+            alt="Gå tillbaka till översikten"
+          />
+        </a>
+      </section>
+      <figure>
+        <img
+          src="https://picsum.photos/id/823/175/175"
+          alt="Användarens profilbild"
+        />
+      </figure>
+      <p>Fortsätt drömma, <span id="user-name">NAMN</span>!</p>
     </header>
     <main>
-        <h2>Lägg till en ny dröm</h2>
-        <form>
-            <label for="dream">Dröm:</label>
-            <input type="text" id="dream" placeholder="Ex. Besök Machu Picchu" aria-describedby="dream-error-message" required />
-            <p id="dream-error-message" class="error-message" role="alert" style="display: none;">Vänligen ange vad du drömmer om.</p>
-            <label for="dream-select">Tema:</label>
-            <select id="dream-select" name="dream" aria-describedby="theme-error-message" required>
-                <!-- Level-up: generera options efter tema-listans innehåll -->
-                <option value="">-- Välj ett tema --</option>
-                <option value="teknik">Teknikdrömmar</option>
-                <option value="vardag">Vardagsdrömmar</option>
-                <option value="hus">Husdrömmar</option>
-                <option value="sport">Sportdrömmar</option>
-            </select> 
-            <p id="theme-error-message" class="error-message" role="alert" style="display: none;">Vänligen välj ett tema för din dröm.</p>
-            <button type="submit">Lägg till</button>
-        </form>
+      <h2>Lägg till en ny dröm</h2>
+      <form>
+        <label for="dream">Dröm:</label>
+        <input
+          type="text"
+          id="dream"
+          placeholder="Ex. Besök Machu Picchu"
+          aria-describedby="dream-error-message"
+          required
+        />
+        <p
+          id="dream-error-message"
+          class="error-message"
+          role="alert"
+          style="display: none"
+        >
+          Vänligen ange vad du drömmer om.
+        </p>
+        <label for="dream-select">Tema:</label>
+        <select
+          id="dream-select"
+          name="dream"
+          aria-describedby="theme-error-message"
+          required
+        >
+          <!-- Level-up: generera options efter tema-listans innehåll -->
+          <option value="">-- Välj ett tema --</option>
+          <option value="teknik">Teknikdrömmar</option>
+          <option value="vardag">Vardagsdrömmar</option>
+          <option value="hus">Husdrömmar</option>
+          <option value="sport">Sportdrömmar</option>
+        </select>
+        <p
+          id="theme-error-message"
+          class="error-message"
+          role="alert"
+          style="display: none"
+        >
+          Vänligen välj ett tema för din dröm.
+        </p>
+        <button type="submit">Lägg till</button>
+      </form>
     </main>
-</body>
-
+  </body>
 </html>
