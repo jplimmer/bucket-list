@@ -1,5 +1,6 @@
 import { getRequiredElement } from "../utils/domHelpers.js";
 import { login } from "../services/auth.js";
+import { togglePassword } from "../components/togglePassword.js";
 
 // Find DOM elements
 const loginForm = getRequiredElement<HTMLFormElement>("form");
@@ -35,5 +36,18 @@ loginForm.addEventListener("submit", async (e) => {
 
     // Redirect to dashboard
     window.location.href = "dashboard.html";
+  }
+});
+
+// Call toggle password on icon click
+loginForm.addEventListener("click", (e) => {
+  console.log(e.target);
+  const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
+    ".toggle-password"
+  );
+
+  if (btn) {
+    e.preventDefault();
+    togglePassword(btn);
   }
 });
