@@ -1,6 +1,6 @@
 import { getRequiredElement } from "../utils/domHelpers.js";
 import { login } from "../services/auth.js";
-import { togglePassword } from "../components/togglePassword.js";
+import { togglePassword } from "../ui/togglePassword.js";
 
 // Find DOM elements
 const loginForm = getRequiredElement<HTMLFormElement>("form");

@@ -1,3 +1,4 @@
+// Generate next id, taking either a counter or an array of objects with an id property as argument
 export function generateId<T extends { id: number }>(
   counter?: number,
   array?: T[]
