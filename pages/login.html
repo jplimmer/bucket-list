@@ -29,15 +29,15 @@
             id="username"
             name="username"
             placeholder="Ditt användarnamn"
+            autocomplete="username"
             aria-describedby="username-error-message"
             required
           />
 
           <p
             id="username-error-message"
-            class="error-message"
+            class="error-message hidden"
             role="alert"
-            style="display: none"
           >
             Vänligen ange ditt användarnamn.
           </p>
@@ -60,9 +60,8 @@
           </div>
           <p
             id="password-error-message"
-            class="error-message"
+            class="error-message hidden"
             role="alert"
-            style="display: none"
           >
             Vänligen ange ditt lösenord.
           </p>
