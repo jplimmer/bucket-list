@@ -10,6 +10,8 @@ Du har fått en färdig HTML-struktur – din uppgift är att ge liv åt den med
 
 Appen är en **Bucket List** – alltså en "att göra innan jag dör"-lista. Till skillnad från en vanlig to-do, handlar det här om dina **drömmar**: små som stora.
 
+Figmaskissen: [länk](https://www.figma.com/design/wlk1szMZUIRXUduhvb6qI5/Untitled?node-id=0-1&t=jEHFpiZDKjmukotw-1)
+
 ---
 
 ## 🔐 Steg 1: Logga in
