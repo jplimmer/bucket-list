@@ -1,86 +1,85 @@
- @import './global.css';
- @import './page-header.css';
+@import "./global.css";
+@import "./page-header.css";
 
- h2 {
-     text-align: center;
-     font-weight: 400;
-     margin: var(--spacing-medium);
- }
+h2 {
+  text-align: center;
+  font-weight: 400;
+  margin: var(--spacing-medium);
+}
 
- .list-heading {
-     padding: var(--spacing-small) 0;
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
- }
+.list-heading {
+  padding: var(--spacing-small) 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
- .list-heading h4 {
-     margin: unset;
- }
+.list-heading h4 {
+  margin: unset;
+}
 
- .list-heading img {
-     height: 20px;
- }
+.list-heading img {
+  height: 20px;
+}
 
- .dream-list {
-     display: flex;
-     flex-direction: column;
-     gap: 0.5rem;
- }
+.dream-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
 
- .dream-list_item {
-     font-weight: bold;
-     display: grid;
-     grid-template-columns: auto 1fr auto;
- }
+.dream-list_item {
+  font-weight: bold;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+}
 
- .dream-list_item button {
-     display: grid;
-     transition: all 0.3s ease;
-     cursor: pointer;
-     margin-bottom: 0.5rem;
-     border: none;
-     padding-right: 0;
- }
+.dream-list_item button {
+  display: grid;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  border: none;
+  padding-right: 0;
+}
 
- .dream-list_item button:hover img {
-     animation: shake 0.3s;
- }
+.dream-list_item button:hover img {
+  animation: shake 0.3s;
+}
 
+.dream-list_item > * {
+  align-self: start;
+}
 
- .dream-list_item>* {
-     align-self: start;
- }
+.dream-check {
+  width: min-content;
+  margin-top: 0.3rem;
+  margin-right: 0.5rem;
+}
 
- .dream-check {
-     width: min-content;
-     margin-top: 0.3rem;
-     margin-right: 0.5rem;
- }
+.dream-theme {
+  font-weight: 400;
+  font-style: italic;
+}
 
- .dream-theme {
-     font-weight: 400;
-     font-style: italic;
- }
+@keyframes shake {
+  0% {
+    transform: translate(0);
+  }
 
- @keyframes shake {
-     0% {
-         transform: translate(0);
-     }
+  25% {
+    transform: translateX(-3px);
+  }
 
-     25% {
-         transform: translateX(-3px);
-     }
+  50% {
+    transform: translateX(3px);
+  }
 
-     50% {
-         transform: translateX(3px);
-     }
+  75% {
+    transform: translateX(-3px);
+  }
 
-     75% {
-         transform: translateX(-3px);
-     }
-
-     100% {
-         transform: translateX(0);
-     }
- }
+  100% {
+    transform: translateX(0);
+  }
+}

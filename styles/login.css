@@ -1,31 +1,26 @@
- @import './global.css';
- @import './form.css';
- body {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
- }
+@import "./global.css";
+@import "./form.css";
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
 
- header {
-    height: 50vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
- }
- h1 {
-    text-align: center;
-    margin: 0 2rem;
-    margin-top: var(--spacing-large);
-    font-size: 28px;
-    line-height: 100%;
- }
+header {
+  height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+h1 {
+  text-align: center;
+  margin: 0 2rem;
+  margin-top: var(--spacing-large);
+  font-size: 28px;
+  line-height: 100%;
+}
 
- h2 {
-    font-size: medium;
- }
- a {
-   color: var(--primary-red);
-   display: block;
-   text-align: right;
- }
+h2 {
+  font-size: medium;
+}

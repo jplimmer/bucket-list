@@ -1,64 +1,65 @@
- @import './global.css';
- @import './page-header.css';
- @import './form.css';
+@import "./global.css";
+@import "./page-header.css";
+@import "./form.css";
 
- h4:not(h4:first-of-type) {
-     margin-top: 1rem;
- }
+h4:not(h4:first-of-type) {
+  margin-top: 1rem;
+}
 
- #theme-list {
-     width: 100%;
- }
+#theme-list {
+  width: 100%;
+}
 
- #theme-list li {
-     display: grid;
-     grid-template-columns: 1fr 1fr;
-     transition: all 0.3s ease;
-     cursor: pointer;
-     margin-bottom: 0.5rem;
- }
+#theme-list li {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+}
 
- li p {
-     color: var(--text-color);
- }
+li p {
+  color: var(--text-color);
+}
 
- #theme-list li:hover p {
-     transform: scale(1.01);
-     transition: transform 0.2s ease-in-out;
- }
+#theme-list li:hover p {
+  transform: scale(1.01);
+  transition: transform 0.2s ease-in-out;
+}
 
- #theme-list li:hover img {
-     animation: shake 0.3s;
- }
+#theme-list li:hover img {
+  animation: shake 0.3s;
+}
 
- #theme-list li img {
-     justify-self: end;
- }
+#theme-list li img {
+  justify-self: end;
+}
 
- .change-name, .add-theme {
-    display: grid;
-    gap: 0.2rem;
-    grid-template-columns: 3fr 1fr;
- }
+.change-name,
+.add-theme {
+  display: grid;
+  gap: 0.2rem;
+  grid-template-columns: 3fr 1fr;
+}
 
- @keyframes shake {
-     0% {
-         transform: translate(0);
-     }
+@keyframes shake {
+  0% {
+    transform: translate(0);
+  }
 
-     25% {
-         transform: translateX(-3px);
-     }
+  25% {
+    transform: translateX(-3px);
+  }
 
-     50% {
-         transform: translateX(3px);
-     }
+  50% {
+    transform: translateX(3px);
+  }
 
-     75% {
-         transform: translateX(-3px);
-     }
+  75% {
+    transform: translateX(-3px);
+  }
 
-     100% {
-         transform: translateX(0);
-     }
- }
+  100% {
+    transform: translateX(0);
+  }
+}
