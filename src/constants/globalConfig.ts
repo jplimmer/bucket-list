@@ -1,3 +1,5 @@
+export const INPUT_MAX_LENGTH = 50;
+
 // import { Dream } from "./types";
 
 // export const dreams: Dream[] = [
