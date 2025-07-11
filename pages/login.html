@@ -25,14 +25,15 @@
             id="username"
             name="username"
             placeholder="Ditt användarnamn"
+            autocomplete="username"
             aria-describedby="username-error-message"
+            required
           />
 
           <p
             id="username-error-message"
-            class="error-message"
+            class="error-message hidden"
             role="alert"
-            style="display: none"
           >
             Vänligen ange ditt användarnamn.
           </p>
@@ -44,19 +45,26 @@
               name="password"
               placeholder="Ditt lösenord"
               aria-describedby="password-error-message"
+              required
             />
-            <button type="button" class="toggle-password">
+            <button
+              type="button"
+              class="toggle-password"
+              data-target="password"
+            >
               <img
-                src="../assets/images/eye-icon.png"
+                src="../assets/images/eye-icon.svg"
+                width="16"
+                height="11"
                 alt="Växla lösenords synlighet"
+                class="toggle-password-icon"
               />
             </button>
           </div>
           <p
             id="password-error-message"
-            class="error-message"
+            class="error-message hidden"
             role="alert"
-            style="display: none"
           >
             Vänligen ange ditt lösenord.
           </p>

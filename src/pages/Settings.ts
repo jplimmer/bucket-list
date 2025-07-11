@@ -1,8 +1,9 @@
 // här är det bara level-up!
-import { name, themes } from "../models/variables.js";
+import { themes } from "../models/types.js";
+import { getUsername } from "../utils/storage.js";
 
 const nameInput = document.getElementById("name-input") as HTMLInputElement;
-nameInput.value = name;
+nameInput.value = getUsername() ?? "";
 
 const themeList = document.getElementById("theme-list") as HTMLUListElement;
 if (themeList) {

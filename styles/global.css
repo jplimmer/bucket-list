@@ -1,26 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 :root {
-    /* Färger */
-    --primary-blue: #3EBFBF;
-    --secondary-blue: #319595;
-    --primary-red: #AF2279;
-    --text-color: #333;
-    --background-color: #F0F0F0;
+  /* Färger */
+  --primary-blue: #3ebfbf;
+  --secondary-blue: #319595;
+  --primary-red: #af2279;
+  --text-color: #333;
+  --background-color: #f0f0f0;
 
-    /* Typografi */
-    --font-family-sans-serif: 'Poppins', Helvetica, Arial, sans-serif;
-    --font-size-base: 16px;
-    --line-height-base: 1.5;
+  /* Typografi */
+  --font-family-sans-serif: "Poppins", Helvetica, Arial, sans-serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.5;
 
-    /* Mellanslag/storlekar */
-    --spacing-small: 8px;
-    --spacing-medium: 16px;
-    --spacing-large: 32px;
+  /* Mellanslag/storlekar */
+  --spacing-small: 8px;
+  --spacing-medium: 16px;
+  --spacing-large: 32px;
 
-    /* Gränser/skuggor */
-    --border-radius: 4px;
-    --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Gränser/skuggor */
+  --border-radius: 4px;
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* En populär stil-återställning (reset) */
@@ -28,72 +28,82 @@
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
-    /* Gör att padding och border inkluderas i elementets totala bredd och höjd */
+  box-sizing: border-box;
+  /* Gör att padding och border inkluderas i elementets totala bredd och höjd */
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    font-family: var(--font-family-sans-serif);
-    font-size: var(--font-size-base);
-    line-height: var(--line-height-base);
-    color: var(--text-color);
-    background-color: var(--background-color);
-    -webkit-font-smoothing: antialiased;
-    /* För bättre rendering av typsnitt på WebKit-baserade webbläsare */
-    -moz-osx-font-smoothing: grayscale;
-    /* För bättre rendering av typsnitt på macOS */
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: var(--font-family-sans-serif);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--text-color);
+  background-color: var(--background-color);
+  -webkit-font-smoothing: antialiased;
+  /* För bättre rendering av typsnitt på WebKit-baserade webbläsare */
+  -moz-osx-font-smoothing: grayscale;
+  /* För bättre rendering av typsnitt på macOS */
 }
 
-h1, h2, h3, h4, h5, h6 {
-    margin-top: 0;
-    margin-bottom: var(--spacing-medium);
-    font-weight: bold;
-    color: var(--text-color);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-top: 0;
+  margin-bottom: var(--spacing-medium);
+  font-weight: bold;
+  color: var(--text-color);
 }
 
 p {
-    margin-top: 0;
-    margin-bottom: var(--spacing-medium);
-    color: var(--text-color);
+  margin-top: 0;
+  margin-bottom: var(--spacing-medium);
+  color: var(--text-color);
 }
 
 a {
-    color: var(--primary-blue);
-    text-decoration: none;
+  color: var(--primary-blue);
+  text-decoration: none;
 }
 
 a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
-ul, ol {
-    list-style: none;
-    /* Tar bort standardpunktlistor */
-    margin: 0;
-    padding: 0;
+ul,
+ol {
+  list-style: none;
+  /* Tar bort standardpunktlistor */
+  margin: 0;
+  padding: 0;
 }
 
 main {
-    padding: var(--spacing-medium)
+  padding: var(--spacing-medium);
 }
 
 figure {
-    margin-block-start: 0;
-    margin-block-end: 0;
-    margin-inline-start: 0;
-    margin-inline-end: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0;
+  margin-inline-end: 0;
 }
 
 .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: -1px;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.hidden {
+  display: none;
 }

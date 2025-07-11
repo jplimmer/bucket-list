@@ -1,62 +1,73 @@
 label {
-    display: block;
-    margin-top: 1rem;
+  display: block;
+  margin-top: 1rem;
 }
 
 input[type="text"],
-input[type="password"], select {
-    width: 100%;
-    padding: 0.7rem;
-    margin-top: 0.25rem;
-    border: none;
-    border-radius: var(--border-radius);
+input[type="password"],
+select {
+  width: 100%;
+  padding: 0.7rem;
+  margin-top: 0.25rem;
+  border: none;
+  border-radius: var(--border-radius);
+}
+
+.error-message {
+  color: var(--primary-red);
+  font-style: italic;
+  margin-block-start: 0.25rem;
+  padding-inline-start: 0.7rem;
 }
 
 .password-wrapper {
-    position: relative;
+  position: relative;
 }
 
 .toggle-password {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    cursor: pointer;
-    user-select: none;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+  user-select: none;
 }
 
 .remember {
-    margin-top: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .remember label {
-    margin: unset;
+  margin: unset;
 }
 
 button {
-    margin-top: 1.5rem;
-    padding: 1rem 1rem;
-    width: 100%;
-    background-color: var(--primary-blue);
-    color: white;
-    font-size: var(--font-size-base);
-    font-weight: bold;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
+  margin-top: 1.5rem;
+  padding: 1rem 1rem;
+  width: 100%;
+  background-color: var(--primary-blue);
+  color: white;
+  font-size: var(--font-size-base);
+  font-weight: bold;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
 }
+
 button.confirm-input {
-    margin-top: 0.5rem;
+  margin-top: 0.5rem;
 }
+
 button.logout {
-    background-color: var(--primary-red);
-    margin-top: 4rem;
+  background-color: var(--primary-red);
+  margin-top: 4rem;
 }
+
 button.toggle-password {
-    margin-top: 4px;
-    padding: unset;
-    width: unset;
-    background-color: unset;
+  margin-top: 4px;
+  padding: unset;
+  width: unset;
+  background-color: unset;
 }
