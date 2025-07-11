@@ -2,7 +2,7 @@ export interface Dream {
   id: number;
   name: string;
   theme: string;
-  checked: boolean;
+  isChecked: boolean;
 }
 
 // Editable array of literal types (use with type T = typeof themes[number])

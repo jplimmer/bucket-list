@@ -17,9 +17,9 @@
         </a>
       </section>
       <figure>
-        <img src="https://picsum.photos/id/823/175/175" alt="profile images" />
+        <img src="https://picsum.photos/id/823/175/175" alt="Profilbild" />
       </figure>
-      <p>Välkommen, <span id="user-name">NAMN</span></p>
+      <p>Välkommen<span id="user-name">NAMN</span></p>
     </header>
     <main>
       <h2>Dags att nå dina <span class="dream-theme">drömmar!</span></h2>
@@ -78,6 +78,19 @@
             </button>
           </li>
         </ul>
+        <!-- Template for  -->
+        <template id="dream-tpl">
+          <li class="dream-list__item">
+            <input type="checkbox" name="dream-check" class="dream-check" />
+            <label for="dream-check">
+              <span class="dream-theme"></span>
+            </label>
+            <button type="button">
+              <img src="../assets/images/trash_delete.png" alt="Ta bort" />
+            </button>
+          </li>
+          .dream-check
+        </template>
       </section>
     </main>
   </body>
