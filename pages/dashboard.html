@@ -26,70 +26,28 @@
       <section>
         <div class="list-heading">
           <h4>Bucketlist:</h4>
-          <a href="add-dream.html">
-            <img src="../assets/images/plussign_circled.png" alt="plus sign" />
+          <a href="add-dream.html" aria-label="Add new dream to bucketlist">
+            <img src="../assets/images/plussign_circled.png" alt="" />
           </a>
         </div>
         <ul class="dream-list">
-          <li class="dream-list_item">
-            <input
-              class="dream-check"
-              type="checkbox"
-              name="dream-check"
-              id="dream-check-1"
-              checked
-            />
-            <label for="dream-check-1"
-              >Lära mig HTML/CSS,
-              <span class="dream-theme">teknikdrömmar</span></label
-            >
-            <button type="button">
-              <img src="../assets/images/trash_delete.png" />
-            </button>
-          </li>
-          <li class="dream-list_item">
-            <input
-              class="dream-check"
-              type="checkbox"
-              name="dream-check"
-              id="dream-check-2"
-            />
-            <label for="dream-check-2"
-              >Lära mig TypeScript,
-              <span class="dream-theme">teknikdrömmar</span></label
-            >
-            <button type="button">
-              <img src="../assets/images/trash_delete.png" />
-            </button>
-          </li>
-          <li class="dream-list_item">
-            <input
-              class="dream-check"
-              type="checkbox"
-              name="dream-check"
-              id="dream-check-3"
-            />
-            <label for="dream-check-3"
-              >En dröm som tar flera rader lorem ipsum,
-              <span class="dream-theme">vardagsdrömmar</span></label
-            >
-            <button type="button">
-              <img src="../assets/images/trash_delete.png" />
-            </button>
-          </li>
+          <!-- Dream list inserted here using Typescript -->
         </ul>
-        <!-- Template for  -->
+        <!-- Template for dream list -->
         <template id="dream-tpl">
           <li class="dream-list__item">
-            <input type="checkbox" name="dream-check" class="dream-check" />
-            <label for="dream-check">
+            <input type="checkbox" class="dream-check" />
+            <label>
               <span class="dream-theme"></span>
             </label>
             <button type="button">
-              <img src="../assets/images/trash_delete.png" alt="Ta bort" />
+              <img
+                src="../assets/images/trash_delete.png"
+                alt=""
+                aria-hidden="true"
+              />
             </button>
           </li>
-          .dream-check
         </template>
       </section>
     </main>
