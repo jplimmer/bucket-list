@@ -41,11 +41,19 @@
         <!-- Template for dream list -->
         <template id="dream-tpl">
           <li class="dream-list__item">
-            <input type="checkbox" class="dream-check" />
+            <input
+              type="checkbox"
+              data-action="toggle-check"
+              class="dream-check"
+            />
             <label>
               <span class="dream-theme"></span>
             </label>
-            <button type="button" aria-label="Ta bort dröm">
+            <button
+              type="button"
+              data-action="delete-dream"
+              aria-label="Ta bort dröm"
+            >
               <img
                 src="../assets/images/trash_delete.png"
                 alt=""
