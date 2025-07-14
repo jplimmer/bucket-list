@@ -2,6 +2,11 @@
 import { themes } from "../models/types.js";
 import { getUsername } from "../utils/storage.js";
 
+import { redirectIfNotLoggedIn } from "../services/authService.js";
+
+// Redirect if not logged in
+redirectIfNotLoggedIn();
+
 const nameInput = document.getElementById("name-input") as HTMLInputElement;
 nameInput.value = getUsername() ?? "";
 
