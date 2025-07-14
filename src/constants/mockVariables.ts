@@ -1,6 +1,7 @@
 import { Dream } from "../models/types.js";
+import { saveDreamList } from "../utils/storage.js";
 
-export const dreams: Dream[] = [
+const dreams: Dream[] = [
   {
     id: 1,
     name: "Lära mig HTML/CSS",
@@ -20,3 +21,7 @@ export const dreams: Dream[] = [
     isChecked: false,
   },
 ];
+
+export function saveMockDreams(): void {
+  saveDreamList(dreams);
+}
