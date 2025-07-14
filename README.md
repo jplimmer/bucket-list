@@ -64,9 +64,11 @@ npx tsc
 │   ├── login.html
 │   └── settings.html
 ├── src/
-│   ├── components/
+│   ├── constants/
 │   ├── models/
 │   ├── pages/
+│   ├── services/
+│   ├── ui/
 │   └── utils/
 ├── styles/
 │   └── (css styles)
