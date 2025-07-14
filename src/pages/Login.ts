@@ -20,20 +20,9 @@ loginForm.addEventListener("submit", async (e) => {
   const result = await login(usernameInput.value, passwordInput.value);
 
   if (!result.success) {
-    // Update and display error messages
-    usernameError.textContent = result.errors.username || "";
-    passwordError.textContent = result.errors.password || "";
-    usernameError.classList.remove("hidden");
-    passwordError.classList.remove("hidden");
-    // If username error, replace user input with suggested valid input
-    if (result.errors.username) {
-      usernameInput.value = result.suggestion ?? "";
-    }
+    displayLoginErrors(result.errors, result.suggestion);
   } else {
-    // Hide error messages
-    usernameError.classList.add("hidden");
-    passwordError.classList.add("hidden");
-
+    clearLoginErrors();
     // Redirect to dashboard
     window.location.href = "dashboard.html";
   }
@@ -51,3 +40,23 @@ loginForm.addEventListener("click", (e) => {
     togglePassword(btn);
   }
 });
+
+function displayLoginErrors(
+  errors: Record<string, string>,
+  suggestion?: string
+): void {
+  usernameError.textContent = errors.username || "";
+  passwordError.textContent = errors.password || "";
+  usernameError.classList.remove("hidden");
+  passwordError.classList.remove("hidden");
+
+  // If username error, replace user input with suggested valid input
+  if (errors.username && suggestion) {
+    usernameInput.value = suggestion;
+  }
+}
+
+function clearLoginErrors(): void {
+  usernameError.classList.add("hidden");
+  passwordError.classList.add("hidden");
+}
