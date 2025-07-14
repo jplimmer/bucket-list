@@ -1,5 +1,6 @@
 import { STORAGE_CONFIG } from "../constants/storageConfig.js";
 import { Dream } from "../models/types.js";
+import { validateAndSanitiseInput } from "./sanitiseInput.js";
 
 export function clearStorage(): boolean {
   try {
@@ -11,9 +12,20 @@ export function clearStorage(): boolean {
   }
 }
 
-export function setUsername(username: string): boolean {
+export function saveUsername(username: string): boolean {
   try {
-    localStorage.setItem(STORAGE_CONFIG.USERNAME, username);
+    const usernameSanitisationResult = validateAndSanitiseInput(username);
+
+    if (!usernameSanitisationResult.isValid) {
+      const errors = usernameSanitisationResult.issues.join("\n");
+      console.error("Username failed sanitisation checks:", errors);
+      return false;
+    }
+
+    localStorage.setItem(
+      STORAGE_CONFIG.USERNAME,
+      usernameSanitisationResult.sanitisedInput
+    );
     return true;
   } catch (error) {
     console.error("Failed to save username:", error);
