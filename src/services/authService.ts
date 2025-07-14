@@ -58,7 +58,12 @@ export function login(
   }
 
   // Auth success: save username and return 'success: true'
-  setUsername(usernameSanitisationResult.sanitisedInput);
+  const saveSuccess = setUsername(usernameSanitisationResult.sanitisedInput);
+  if (!saveSuccess) {
+    errors.username = "Failed to save username to storage.";
+    return { success: false, errors };
+  }
+
   return { success: true, errors };
 }
 

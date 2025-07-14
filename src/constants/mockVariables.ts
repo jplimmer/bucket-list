@@ -23,5 +23,8 @@ const dreams: Dream[] = [
 ];
 
 export function saveMockDreams(): void {
-  saveDreamList(dreams);
+  const saveSuccess = saveDreamList(dreams);
+  if (!saveSuccess) {
+    console.error("Mock dream list not saved.");
+  }
 }
