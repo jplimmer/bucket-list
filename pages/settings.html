@@ -11,7 +11,7 @@
   <body>
     <!-- om du vill göra level-ups -->
     <header>
-      <section class="header-top">
+      <div class="header-top">
         <h1>Inställningar</h1>
         <a href="dashboard.html">
           <img
@@ -21,17 +21,16 @@
             alt="Stäng inställningar och gå till översikt"
           />
         </a>
-      </section>
-      <figure>
-        <img
-          src="https://picsum.photos/id/823/175/175"
-          alt="Användarens profilbild"
-        />
-      </figure>
+      </div>
+      <img
+        class="profile-pic"
+        src="https://picsum.photos/id/823/175/175"
+        alt="Användarens profilbild"
+      />
       <p>Här kan du ändra inställningar</p>
     </header>
     <main>
-      <h4>Användarinfo</h4>
+      <h2>Användarinfo</h2>
       <div class="change-name">
         <label for="name-input" class="visually-hidden"
           >Ändra användarnamn:</label
@@ -45,10 +44,9 @@
           Spara
         </button>
       </div>
-      <h4>Drömteman</h4>
-      <!-- De befintliga dröm-teman som redan finns ska renderas ut i listan nedan -->
+      <h2>Drömteman</h2>
       <ul id="theme-list"></ul>
-      <h4>Lägg till nytt tema:</h4>
+      <h2>Lägg till nytt tema:</h2>
       <div class="add-theme">
         <label for="theme-input" class="visually-hidden">Nytt tema:</label>
         <input id="theme-input" type="text" />
