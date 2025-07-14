@@ -2,7 +2,11 @@
 @import "./page-header.css";
 @import "./form.css";
 
-h4:not(h4:first-of-type) {
+h2 {
+  font-size: 1rem;
+}
+
+h2:not(h2:first-of-type) {
   margin-top: 1rem;
 }
 

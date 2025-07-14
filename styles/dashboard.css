@@ -14,7 +14,7 @@ h2 {
   align-items: center;
 }
 
-.list-heading h4 {
+.list-heading h3 {
   margin: unset;
 }
 
@@ -28,26 +28,26 @@ h2 {
   gap: 0.5rem;
 }
 
-.dream-list_item {
+.dream-list__item {
   font-weight: bold;
   display: grid;
   grid-template-columns: auto 1fr auto;
+
+  button {
+    display: grid;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-bottom: 0.5rem;
+    border: none;
+    padding-right: 0;
+  }
+
+  button:hover img {
+    animation: shake 0.3s;
+  }
 }
 
-.dream-list_item button {
-  display: grid;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  margin-bottom: 0.5rem;
-  border: none;
-  padding-right: 0;
-}
-
-.dream-list_item button:hover img {
-  animation: shake 0.3s;
-}
-
-.dream-list_item > * {
+.dream-list__item > * {
   align-self: start;
 }
 

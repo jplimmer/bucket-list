@@ -1,7 +1,17 @@
 import { AUTH_CONFIG } from "../constants/authConfig.js";
 import { ERROR_MESSAGES } from "../constants/errorMessages.js";
 import { validateAndSanitiseInput } from "../utils/sanitiseInput.js";
-import { setUsername } from "../utils/storage.js";
+import { getUsername, saveUsername } from "../utils/storage.js";
+
+export function redirectIfNotLoggedIn(): void {
+  console.log("Checking if user logged in...");
+  const username = getUsername();
+  if (!username) {
+    window.location.replace("/login.html");
+    throw new Error("No user logged in, redirecting...");
+  }
+  console.log(`User '${username}' is logged in.`);
+}
 
 export function login(
   username: string,
@@ -48,7 +58,12 @@ export function login(
   }
 
   // Auth success: save username and return 'success: true'
-  setUsername(usernameSanitisationResult.sanitisedInput);
+  const saveSuccess = saveUsername(usernameSanitisationResult.sanitisedInput);
+  if (!saveSuccess) {
+    errors.username = "Failed to save username to storage.";
+    return { success: false, errors };
+  }
+
   return { success: true, errors };
 }
 

@@ -10,74 +10,58 @@
 
   <body>
     <header>
-      <section class="header-top">
+      <div class="header-top">
         <h1>Översikt</h1>
-        <a href="settings.html">
+        <a href="settings.html" aria-label="Inställningar">
           <img src="../assets/images/cog_settings.png" width="20" height="20" />
         </a>
-      </section>
-      <figure>
-        <img src="https://picsum.photos/id/823/175/175" alt="profile images" />
-      </figure>
-      <p>Välkommen, <span id="user-name">NAMN</span></p>
+      </div>
+      <img
+        class="profile-pic"
+        src="https://picsum.photos/id/823/175/175"
+        alt="Användarens profilbild"
+      />
+      <p>Välkommen<span id="user-name">NAMN</span></p>
     </header>
     <main>
       <h2>Dags att nå dina <span class="dream-theme">drömmar!</span></h2>
       <section>
         <div class="list-heading">
-          <h4>Bucketlist:</h4>
-          <a href="add-dream.html">
-            <img src="../assets/images/plussign_circled.png" alt="plus sign" />
+          <h3>Bucketlist:</h3>
+          <a
+            href="add-dream.html"
+            aria-label="Lägg till ny dröm på bucketlistan"
+          >
+            <img src="../assets/images/plussign_circled.png" alt="" />
           </a>
         </div>
         <ul class="dream-list">
-          <li class="dream-list_item">
-            <input
-              class="dream-check"
-              type="checkbox"
-              name="dream-check"
-              id="dream-check-1"
-              checked
-            />
-            <label for="dream-check-1"
-              >Lära mig HTML/CSS,
-              <span class="dream-theme">teknikdrömmar</span></label
-            >
-            <button type="button">
-              <img src="../assets/images/trash_delete.png" />
-            </button>
-          </li>
-          <li class="dream-list_item">
-            <input
-              class="dream-check"
-              type="checkbox"
-              name="dream-check"
-              id="dream-check-2"
-            />
-            <label for="dream-check-2"
-              >Lära mig TypeScript,
-              <span class="dream-theme">teknikdrömmar</span></label
-            >
-            <button type="button">
-              <img src="../assets/images/trash_delete.png" />
-            </button>
-          </li>
-          <li class="dream-list_item">
-            <input
-              class="dream-check"
-              type="checkbox"
-              name="dream-check"
-              id="dream-check-3"
-            />
-            <label for="dream-check-3"
-              >En dröm som tar flera rader lorem ipsum,
-              <span class="dream-theme">vardagsdrömmar</span></label
-            >
-            <button type="button">
-              <img src="../assets/images/trash_delete.png" />
-            </button>
-          </li>
+          <!-- Dream list inserted here using Typescript -->
         </ul>
+        <!-- Template for dream list -->
+        <template id="dream-tpl">
+          <li class="dream-list__item">
+            <input
+              type="checkbox"
+              data-action="toggle-check"
+              class="dream-check"
+            />
+            <label>
+              <span class="dream-theme"></span>
+            </label>
+            <button
+              type="button"
+              data-action="delete-dream"
+              aria-label="Ta bort dröm"
+            >
+              <img
+                src="../assets/images/trash_delete.png"
+                alt=""
+                aria-hidden="true"
+              />
+            </button>
+          </li>
+        </template>
       </section>
     </main>
   </body>

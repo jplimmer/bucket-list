@@ -16,7 +16,7 @@ header {
   width: 100%;
 }
 
-figure img {
+.profile-pic {
   border: 7px solid white;
   border-radius: 100%;
 }
