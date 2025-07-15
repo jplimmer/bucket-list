@@ -1,5 +1,4 @@
-// här är det bara level-up!
-import { themes } from "../models/types.js";
+import { defaultThemes } from "../constants/dreamThemes.js";
 import { getUsername } from "../utils/storage.js";
 
 import { redirectIfNotLoggedIn } from "../services/authService.js";
@@ -12,7 +11,7 @@ nameInput.value = getUsername() ?? "";
 
 const themeList = document.getElementById("theme-list") as HTMLUListElement;
 if (themeList) {
-  themes.forEach((theme) => {
+  defaultThemes.forEach((theme) => {
     const li = document.createElement("li");
     li.innerHTML = `<p>${theme}</p> <img src="../assets/images/trash_delete.png" />`;
     themeList.appendChild(li);
