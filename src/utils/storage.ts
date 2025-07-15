@@ -11,7 +11,7 @@ const logger = getLogger();
  */
 export function clearStorage(): boolean {
   try {
-    localStorage.clear();
+    STORAGE_CONFIG.STORAGE_TYPE.clear();
     return true;
   } catch (error) {
     logger.error("Failed to clear localStorage:", error);
@@ -34,7 +34,7 @@ export function saveUsername(username: string): boolean {
       return false;
     }
 
-    localStorage.setItem(
+    STORAGE_CONFIG.STORAGE_TYPE.setItem(
       STORAGE_CONFIG.USERNAME,
       usernameSanitisationResult.sanitisedInput
     );
@@ -51,7 +51,7 @@ export function saveUsername(username: string): boolean {
  */
 export function getUsername(): string | null {
   try {
-    return localStorage.getItem(STORAGE_CONFIG.USERNAME);
+    return STORAGE_CONFIG.STORAGE_TYPE.getItem(STORAGE_CONFIG.USERNAME);
   } catch (error) {
     logger.error("localStorage access failed:", error);
     return null;
@@ -65,7 +65,10 @@ export function getUsername(): string | null {
  */
 export function saveDreamList(dreamList: Dream[]): boolean {
   try {
-    localStorage.setItem(STORAGE_CONFIG.DREAM_LIST, JSON.stringify(dreamList));
+    STORAGE_CONFIG.STORAGE_TYPE.setItem(
+      STORAGE_CONFIG.DREAM_LIST,
+      JSON.stringify(dreamList)
+    );
     return true;
   } catch (error) {
     logger.error("Failed to save dream list:", error);
@@ -80,7 +83,9 @@ export function saveDreamList(dreamList: Dream[]): boolean {
  */
 export function getDreamList(): Dream[] | null {
   try {
-    const storedList = localStorage.getItem(STORAGE_CONFIG.DREAM_LIST);
+    const storedList = STORAGE_CONFIG.STORAGE_TYPE.getItem(
+      STORAGE_CONFIG.DREAM_LIST
+    );
     if (!storedList) return null;
 
     const dreams: Dream[] = JSON.parse(storedList);
@@ -89,7 +94,7 @@ export function getDreamList(): Dream[] | null {
     logger.error("Failed to retrieve or parse dream list:", error);
     // Clean up potentially corrupted data
     try {
-      localStorage.removeItem(STORAGE_CONFIG.DREAM_LIST);
+      STORAGE_CONFIG.STORAGE_TYPE.removeItem(STORAGE_CONFIG.DREAM_LIST);
     } catch (cleanupError) {
       logger.error("Failed to clean up corrupted dream list:", error);
     }
