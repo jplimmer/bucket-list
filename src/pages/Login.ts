@@ -2,10 +2,13 @@ import { getRequiredElement } from "../utils/domHelpers.js";
 import { login } from "../services/authService.js";
 import { togglePassword } from "../ui/togglePassword.js";
 import { saveMockDreams } from "../constants/mockData.js";
+import { getLogger } from "../utils/logger.js";
 
 /**
  * Login page controller - handles form submission and password toggle.
  */
+
+const logger = getLogger();
 
 // Find DOM elements
 const loginForm = getRequiredElement<HTMLFormElement>("form");
@@ -35,7 +38,7 @@ loginForm.addEventListener("submit", async (e) => {
     saveMockDreams();
 
     // Redirect to dashboard
-    console.log("User logged in.");
+    logger.info("User logged in.");
     window.location.href = "dashboard.html";
   }
 });
