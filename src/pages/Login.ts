@@ -62,7 +62,7 @@ async function handleLoginSubmit(e: Event): Promise<void> {
       window.location.href = "dashboard.html";
     }
   } catch (error) {
-    console.error("Login error:", error);
+    logger.error("Login error:", error);
   } finally {
     isSubmitting = false;
 
