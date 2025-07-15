@@ -1,5 +1,9 @@
 import { ASSETS_CONFIG } from "../constants/globalConfig.js";
+import { displayError } from "../utils/displayError.js";
 import { getRequiredElement } from "../utils/domHelpers.js";
+import { getLogger } from "../utils/logger.js";
+
+const logger = getLogger();
 
 /**
  * Toggles password visibility for the input associated with the button.
@@ -7,20 +11,29 @@ import { getRequiredElement } from "../utils/domHelpers.js";
  * @throws Error when the associated password input cannot be found.
  */
 export function togglePassword(button: HTMLButtonElement): void {
-  // Find the password input using data-target
-  const passwordInput = findPasswordInput(button);
-  if (!passwordInput) throw new Error("Associated password input not found.");
+  try {
+    // Find the password input using data-target
+    const passwordInput = findPasswordInput(button);
+    if (!passwordInput) {
+      logger.error("Associated password input not found for button:", button);
+      displayError("Something went wrong showing the password.");
+      return;
+    }
 
-  // Find the toggle icon within the button
-  const toggleIcon = getRequiredElement<HTMLImageElement>("img", button);
+    // Find the toggle icon within the button
+    const toggleIcon = getRequiredElement<HTMLImageElement>("img", button);
 
-  // Toggle password text visibility and icon
-  if (passwordInput.type === "password") {
-    passwordInput.type = "text";
-    toggleIcon.src = ASSETS_CONFIG.ICONS.EYE_SLASH;
-  } else {
-    passwordInput.type = "password";
-    toggleIcon.src = ASSETS_CONFIG.ICONS.EYE;
+    // Toggle password text visibility and icon
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      toggleIcon.src = ASSETS_CONFIG.ICONS.EYE_SLASH;
+    } else {
+      passwordInput.type = "password";
+      toggleIcon.src = ASSETS_CONFIG.ICONS.EYE;
+    }
+  } catch (error) {
+    logger.error("Failed to toggle password visibility:", error);
+    displayError("Something went wrong showing the password.");
   }
 }
 

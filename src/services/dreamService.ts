@@ -1,5 +1,8 @@
 import { Dream } from "../models/types.js";
+import { getLogger } from "../utils/logger.js";
 import { getDreamList, saveDreamList } from "../utils/storage.js";
+
+const logger = getLogger();
 
 /**
  * Adds a new dream to the dream list.
@@ -19,9 +22,7 @@ export function deleteDream(id: number): void {
   dreamList.splice(index, 1);
 
   const saveSuccess = saveDreamList(dreamList);
-  if (!saveSuccess) {
-    console.error("Could not save updated dream list.");
-  }
+  if (!saveSuccess) throw new Error("Could not save updated dream list.");
 }
 
 /**
@@ -38,9 +39,7 @@ export function toggleDreamChecked(id: number, isChecked: boolean): void {
   dreamList[index].isChecked = isChecked;
 
   const saveSuccess = saveDreamList(dreamList);
-  if (!saveSuccess) {
-    console.error("Could not save updated dream list.");
-  }
+  if (!saveSuccess) throw new Error("Could not save updated dream list.");
 }
 
 /**

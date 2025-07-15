@@ -2,6 +2,10 @@ import { Dream } from "../models/types.js";
 import { getDreamList } from "../utils/storage.js";
 import { createDreamListItem } from "./dreamListItem.js";
 import { renderList } from "../utils/renderList.js";
+import { getLogger } from "../utils/logger.js";
+import { displayError } from "../utils/displayError.js";
+
+const logger = getLogger();
 
 /**
  * Renders the complete dreams list into the specified container element.
@@ -9,8 +13,18 @@ import { renderList } from "../utils/renderList.js";
  * @throws Error when no dreams list is found in storage
  */
 export function renderDreams(container: HTMLElement): void {
-  const dreamList = getDreamList();
-  if (!dreamList) throw new Error("No dream list found in storage.");
+  try {
+    const dreamList = getDreamList();
 
-  renderList<Dream>(container, dreamList, createDreamListItem);
+    if (!dreamList) {
+      logger.debug("No dream list found in storage.");
+      displayError("No dreams found. Add one to get started!");
+      return;
+    }
+
+    renderList<Dream>(container, dreamList, createDreamListItem);
+  } catch (error) {
+    logger.error("Failed to render dreams:", error);
+    displayError("Dreams could not be displayed, try refreshing the page.");
+  }
 }
