@@ -14,7 +14,7 @@ export function addDream() {}
  * @param id The ID of the dream to delete
  * @throws Error when dream list is not found in storage or dream ID doesn't exist
  */
-export function deleteDream(id: number): void {
+export async function deleteDream(id: number): Promise<void> {
   const dreamList = getDreamList();
   if (!dreamList) throw new Error("Dream list not found in storage.");
 
@@ -31,7 +31,10 @@ export function deleteDream(id: number): void {
  * @param isChecked The new checked status
  * @throws Error when dream list is not found in storage or dream ID doesn't exist
  */
-export function toggleDreamChecked(id: number, isChecked: boolean): void {
+export async function toggleDreamChecked(
+  id: number,
+  isChecked: boolean
+): Promise<void> {
   const dreamList = getDreamList();
   if (!dreamList) throw new Error("Dream list not found in storage.");
 
