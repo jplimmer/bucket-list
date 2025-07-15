@@ -1,5 +1,5 @@
 import { getRequiredElement } from "../utils/domHelpers.js";
-import { getUsername } from "../utils/storage.js";
+import { displayUsername } from "../ui/displayUsername.js";
 import { deleteDream, toggleDreamChecked } from "../services/dreamService.js";
 import { renderDreams } from "../ui/renderDreams.js";
 import { redirectIfNotLoggedIn } from "../services/authService.js";
@@ -11,22 +11,17 @@ import { redirectIfNotLoggedIn } from "../services/authService.js";
 // Redirect if not logged in
 redirectIfNotLoggedIn();
 
+// Find DOM elements
+const usernameSpan = getRequiredElement<HTMLSpanElement>("#user-name");
+const dreamUl = getRequiredElement<HTMLUListElement>(".dream-list");
+
 /**
  * Initialises dashboard with username display and dream list rendering.
  */
 document.addEventListener("DOMContentLoaded", () => {
-  // Display username
-  const nameSpan = getRequiredElement<HTMLSpanElement>("#user-name");
-  const userName = getUsername();
-  nameSpan.textContent = userName ? `, ${userName}` : "!";
-
-  // Render dream list
-  const dreamListContainer =
-    getRequiredElement<HTMLUListElement>(".dream-list");
-  renderDreams(dreamListContainer);
+  displayUsername(usernameSpan);
+  renderDreams(dreamUl);
 });
-
-const dreamUl = getRequiredElement<HTMLUListElement>(".dream-list");
 
 /**
  * Handles dream list interactions (delete, toggle check) via event delegation.
