@@ -1,5 +1,9 @@
 import { Dream } from "../models/types.js";
+import { displayError } from "../utils/displayError.js";
+import { getLogger } from "../utils/logger.js";
 import { saveDreamList } from "../utils/storage.js";
+
+const logger = getLogger();
 
 /** Sample dream data for development and testing. */
 const dreams: Dream[] = [
@@ -27,6 +31,6 @@ const dreams: Dream[] = [
 export function saveMockDreams(): void {
   const saveSuccess = saveDreamList(dreams);
   if (!saveSuccess) {
-    console.error("Mock dream list not saved.");
+    logger.error("Mock dream list not saved.");
   }
 }
