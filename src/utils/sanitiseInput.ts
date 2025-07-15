@@ -45,14 +45,14 @@ export function sanitiseInput(raw: string): SanitisationResult {
 
   // Check for script tags
   if (/<script[^>]*>[\s\S]*?<\/script>/gi.test(sanitised)) {
-    issues.push("Script tags detected and removed.");
+    issues.push("Script tags detected and must be removed.");
     sanitised = sanitised.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "");
     hasMaliciousContent = true;
   }
 
   // Check for other HTML tags
   if (/<\/?[^>]+(>|$)/g.test(sanitised)) {
-    issues.push("HTML tags detected and removed.");
+    issues.push("HTML tags detected and must be removed.");
     sanitised = sanitised.replace(/<\/?[^>]+(>|$)/g, "");
     hasMaliciousContent = true;
   }
