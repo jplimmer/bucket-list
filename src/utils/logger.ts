@@ -1,5 +1,13 @@
+import { displayError } from "./displayError.js";
+
+/**
+ * Supported log levels.
+ */
 type LogLevel = "trace" | "debug" | "info" | "warn" | "error" | "silent";
 
+/**
+ * Interface defining methods for a basic logger.
+ */
 interface Logger {
   trace: (message: string, ...args: unknown[]) => void;
   debug: (message: string, ...args: unknown[]) => void;
@@ -9,6 +17,10 @@ interface Logger {
   setLevel: (level: LogLevel) => void;
 }
 
+/**
+ * A simple logger that logs messages to the console with timestamps.
+ * Logging can be filtered by severity using `setLevel()`.
+ */
 class SimpleLogger implements Logger {
   private static levels: Record<LogLevel, number> = {
     trace: 0,
@@ -26,6 +38,9 @@ class SimpleLogger implements Logger {
   }
 
   setLevel(level: LogLevel): void {
+    if (!(level in SimpleLogger.levels)) {
+      displayError(`Invalid log level: ${level}`);
+    }
     this.currentLevel = SimpleLogger.levels[level];
   }
 
@@ -88,7 +103,9 @@ const level = "debug";
 // Create single shared instance of logger
 const logger = new SimpleLogger(level as LogLevel);
 
-// Expose function to get the shared instance
+/**
+ * Returns the shared instance of the logger.
+ */
 export function getLogger(): Logger {
   return logger;
 }
