@@ -1,20 +1,39 @@
 import { INPUT_MAX_LENGTH } from "../constants/globalConfig.js";
 
+/**
+ * Result object returned by input sanitisation operations.
+ */
 export interface SanitisationResult {
-  isValid: boolean;
+  /** Whether the input has passed sanitisation without issues */
+  isSafe: boolean;
+  /** The original input string (may be sanitised for security) */
   originalInput: string;
+  /** The cleaned and sanitised input string */
   sanitisedInput: string;
+  /** Array of validation issues found during processing */
   issues: string[];
 }
 
-export function validateAndSanitiseInput(raw: string): SanitisationResult {
+/**
+ * Sanitises user input by removing potentially dangerous content.
+ *
+ * This function performs several security checks:
+ * - Removes script tags to prevent XSS attacks
+ * - Strips HTML tags to prevent injection
+ * - Trunctates input to maximum allowed length
+ * - Validates that input is not empty
+ *
+ * @param raw The raw input string to sanitise
+ * @returns Object containing sanitisation results and sanitised input
+ */
+export function sanitiseInput(raw: string): SanitisationResult {
   const issues: string[] = [];
   let hasMaliciousContent = false;
 
   // Check for empty input
   if (!raw.trim()) {
     return {
-      isValid: false,
+      isSafe: false,
       originalInput: raw,
       sanitisedInput: "",
       issues: ["Input cannot be empty"],
@@ -58,7 +77,7 @@ export function validateAndSanitiseInput(raw: string): SanitisationResult {
   const isValid = issues.length === 0;
 
   return {
-    isValid: isValid,
+    isSafe: isValid,
     originalInput: hasMaliciousContent ? "[CONTENT SANITISED]" : raw,
     sanitisedInput: sanitised,
     issues: issues,

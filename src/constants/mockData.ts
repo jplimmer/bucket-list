@@ -1,6 +1,7 @@
 import { Dream } from "../models/types.js";
 import { saveDreamList } from "../utils/storage.js";
 
+/** Sample dream data for development and testing. */
 const dreams: Dream[] = [
   {
     id: 1,
@@ -22,6 +23,7 @@ const dreams: Dream[] = [
   },
 ];
 
+/** Saves mock dream data to storage for development/testing purposes. */
 export function saveMockDreams(): void {
   const saveSuccess = saveDreamList(dreams);
   if (!saveSuccess) {

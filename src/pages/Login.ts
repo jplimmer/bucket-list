@@ -1,7 +1,11 @@
 import { getRequiredElement } from "../utils/domHelpers.js";
 import { login } from "../services/authService.js";
 import { togglePassword } from "../ui/togglePassword.js";
-import { saveMockDreams } from "../constants/mockVariables.js";
+import { saveMockDreams } from "../constants/mockData.js";
+
+/**
+ * Login page controller - handles form submission and password toggle.
+ */
 
 // Find DOM elements
 const loginForm = getRequiredElement<HTMLFormElement>("form");
@@ -14,7 +18,9 @@ const passwordError = getRequiredElement<HTMLParagraphElement>(
   "#password-error-message"
 );
 
-// Call login on form submit, display errors if unsuccessful
+/**
+ * Handles login form submission and error display
+ */
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -34,7 +40,9 @@ loginForm.addEventListener("submit", async (e) => {
   }
 });
 
-// Call toggle password on icon click
+/**
+ * Handles password visibility toggle-button clicks
+ */
 loginForm.addEventListener("click", (e) => {
   const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
     ".toggle-password"
@@ -46,6 +54,11 @@ loginForm.addEventListener("click", (e) => {
   }
 });
 
+/**
+ * Displays login validation errors and applies username suggestion if available.
+ * @param errors Object containing field-specific error messages
+ * @param suggestion Optional suggested username to replace invalid input
+ */
 function displayLoginErrors(
   errors: Record<string, string>,
   suggestion?: string
@@ -61,6 +74,9 @@ function displayLoginErrors(
   }
 }
 
+/**
+ * Clears all login error messages from display.
+ */
 function clearLoginErrors(): void {
   usernameError.classList.add("hidden");
   passwordError.classList.add("hidden");
