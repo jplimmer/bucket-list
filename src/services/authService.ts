@@ -1,8 +1,11 @@
 import { AUTH_CONFIG } from "../constants/authConfig.js";
 import { ERROR_MESSAGES } from "../constants/errorMessages.js";
-import { validateAndSanitiseInput } from "../utils/sanitiseInput.js";
+import { sanitiseInput } from "../utils/sanitiseInput.js";
 import { getUsername, saveUsername } from "../utils/storage.js";
 
+/** Redirects to login page if no user is currently logged in.
+ * @throws Error when no user is logged in
+ */
 export function redirectIfNotLoggedIn(): void {
   console.log("Checking if user logged in...");
   const username = getUsername();
@@ -13,6 +16,12 @@ export function redirectIfNotLoggedIn(): void {
   console.log(`User '${username}' is logged in.`);
 }
 
+/**
+ * Sanitises and authenticates user credentials and saves username on success.
+ * @param username The username to authenticate
+ * @param password The password to authenticate
+ * @returns Authentication result with success status, errors, and optional 'corrected' suggestion for username
+ */
 export function login(
   username: string,
   password: string
@@ -22,15 +31,15 @@ export function login(
   const errors: Record<string, string> = {};
 
   // Sanitise user inputs
-  const usernameSanitisationResult = validateAndSanitiseInput(username);
-  const passwordSanitisationResult = validateAndSanitiseInput(password);
+  const usernameSanitisationResult = sanitiseInput(username);
+  const passwordSanitisationResult = sanitiseInput(password);
 
-  if (!usernameSanitisationResult.isValid) {
+  if (!usernameSanitisationResult.isSafe) {
     errors.username = usernameSanitisationResult.issues.join("\n");
     suggestion = usernameSanitisationResult.sanitisedInput;
   }
 
-  if (!passwordSanitisationResult.isValid) {
+  if (!passwordSanitisationResult.isSafe) {
     errors.password = passwordSanitisationResult.issues.join("\n");
   }
 
@@ -67,6 +76,11 @@ export function login(
   return { success: true, errors };
 }
 
+/**
+ * Validates username according to authentication rules.
+ * @param username The username to validate
+ * @returns Validation result with success status and error messages
+ */
 export function validateUsername(username: string): {
   success: boolean;
   errors: string[];
@@ -85,6 +99,12 @@ export function validateUsername(username: string): {
   // Auth success: return 'success: true'
   return { success: true, errors };
 }
+
+/**
+ * Validates password according to authentication rules.
+ * @param password The password to validate
+ * @returns Validation result with success status and error messages
+ */
 
 export function validatePassword(password: string): {
   success: boolean;

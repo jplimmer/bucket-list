@@ -1,7 +1,11 @@
 import { STORAGE_CONFIG } from "../constants/storageConfig.js";
 import { Dream } from "../models/types.js";
-import { validateAndSanitiseInput } from "./sanitiseInput.js";
+import { sanitiseInput } from "./sanitiseInput.js";
 
+/**
+ * Clears all data from localStorage.
+ * @returns true if successful, false if an error occurred
+ */
 export function clearStorage(): boolean {
   try {
     localStorage.clear();
@@ -12,11 +16,16 @@ export function clearStorage(): boolean {
   }
 }
 
+/**
+ * Saves a username to localStorage after sanitisation.
+ * @param username The username string to save
+ * @returns true if saved successfully, false if sanitisation failed or storage error occurred
+ */
 export function saveUsername(username: string): boolean {
   try {
-    const usernameSanitisationResult = validateAndSanitiseInput(username);
+    const usernameSanitisationResult = sanitiseInput(username);
 
-    if (!usernameSanitisationResult.isValid) {
+    if (!usernameSanitisationResult.isSafe) {
       const errors = usernameSanitisationResult.issues.join("\n");
       console.error("Username failed sanitisation checks:", errors);
       return false;
@@ -33,6 +42,10 @@ export function saveUsername(username: string): boolean {
   }
 }
 
+/**
+ * Retrieves the stored username from localStorage.
+ * @returns the username string if found, null if not found or storage error occurred
+ */
 export function getUsername(): string | null {
   try {
     return localStorage.getItem(STORAGE_CONFIG.USERNAME);
@@ -42,6 +55,11 @@ export function getUsername(): string | null {
   }
 }
 
+/**
+ * Saves a list of dreams to localStorage as JSON.
+ * @param dreamList Array of Dream objects to save
+ * @returns true if saved successfully, false if error occurred
+ */
 export function saveDreamList(dreamList: Dream[]): boolean {
   try {
     localStorage.setItem(STORAGE_CONFIG.DREAM_LIST, JSON.stringify(dreamList));
@@ -52,6 +70,11 @@ export function saveDreamList(dreamList: Dream[]): boolean {
   }
 }
 
+/**
+ * Retrieves and parses the dream list from localStorage.
+ * Automatically cleans up corrupted data if parsing fails.
+ * @returns array of Dream objects if found and valid, null if not found or corrupted
+ */
 export function getDreamList(): Dream[] | null {
   try {
     const storedList = localStorage.getItem(STORAGE_CONFIG.DREAM_LIST);

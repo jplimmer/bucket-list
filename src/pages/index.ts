@@ -1,6 +1,6 @@
-// när användaren kommer in på sidan (DOMen laddats in), ska den omdirigeras till index.html
+/** Redirects to login page after 4 seconds splash screen delay */
 window.addEventListener("DOMContentLoaded", () => {
   setTimeout(() => {
     window.location.replace("login.html");
-  }, 4000); // 4000 ms = 4 sekunder
+  }, 4000);
 });

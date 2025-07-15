@@ -1,4 +1,10 @@
-// Generate next id, taking either a counter or an array of objects with an id property as argument
+/**
+ * Generates a unique ID, either by incrementing a counter or finding the max ID in an array.
+ * @param counter Counter to increment (optional)
+ * @param array Array of objects with id property to find a max from (optional)
+ * @returns Next available ID
+ * @throws Error if neither counter nor array is provided
+ */
 export function generateId<T extends { id: number }>(
   counter?: number,
   array?: T[]
