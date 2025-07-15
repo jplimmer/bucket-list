@@ -13,7 +13,7 @@ export function redirectIfNotLoggedIn(): void {
   logger.debug("Checking if user logged in...");
   const username = getUsername();
   if (!username) {
-    window.location.replace("/login.html");
+    window.location.replace("./login.html");
     throw new Error("No user logged in, redirecting...");
   }
   logger.debug(`User '${username}' is logged in.`);

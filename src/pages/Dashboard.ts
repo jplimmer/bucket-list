@@ -20,12 +20,9 @@ redirectIfNotLoggedIn();
  * @param container
  * @param dreamId The ID of the dream to delete
  */
-async function handleDreamDeletion(
-  container: HTMLElement,
-  dreamId: number
-): Promise<void> {
+function handleDreamDeletion(container: HTMLElement, dreamId: number): void {
   try {
-    await deleteDream(dreamId);
+    deleteDream(dreamId);
     logger.info(`Dream ${dreamId} deleted successfully`);
     renderDreams(container);
   } catch (error) {
@@ -40,15 +37,15 @@ async function handleDreamDeletion(
  * @param isChecked The new checked state
  * @param checkbox The checkbox element for rollback on error
  */
-async function handleDreamToggle(
+function handleDreamToggle(
   dreamId: number,
   isChecked: boolean,
   checkbox: HTMLInputElement
-): Promise<void> {
+): void {
   const previousState = !isChecked;
 
   try {
-    await toggleDreamChecked(dreamId, isChecked);
+    toggleDreamChecked(dreamId, isChecked);
     logger.info(
       `Dream ${dreamId} toggled to ${isChecked ? "checked" : "unchecked"}`
     );
@@ -65,7 +62,7 @@ async function handleDreamToggle(
  * Handles dream list interactions (delete, toggle check) via event delegation.
  * @param e The click event
  */
-async function handleDreamListClick(e: Event): Promise<void> {
+function handleDreamListClick(e: Event): void {
   const container = e.currentTarget as HTMLUListElement;
   const target = e.target as HTMLElement;
 
@@ -86,12 +83,12 @@ async function handleDreamListClick(e: Event): Promise<void> {
   // Call appropriate function for action, warn if action not recognised
   switch (action) {
     case "delete-dream":
-      await handleDreamDeletion(container, dreamId);
+      handleDreamDeletion(container, dreamId);
       break;
 
     case "toggle-check":
       if (target instanceof HTMLInputElement && target.type === "checkbox") {
-        await handleDreamToggle(dreamId, target.checked, target);
+        handleDreamToggle(dreamId, target.checked, target);
       } else {
         logger.error("Toggle action triggered on non-checkbox element.");
       }
