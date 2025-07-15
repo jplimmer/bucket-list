@@ -1,19 +1,22 @@
 import { AUTH_CONFIG } from "../constants/authConfig.js";
 import { ERROR_MESSAGES } from "../constants/errorMessages.js";
+import { getLogger } from "../utils/logger.js";
 import { sanitiseInput } from "../utils/sanitiseInput.js";
 import { getUsername, saveUsername } from "../utils/storage.js";
+
+const logger = getLogger();
 
 /** Redirects to login page if no user is currently logged in.
  * @throws Error when no user is logged in
  */
 export function redirectIfNotLoggedIn(): void {
-  console.log("Checking if user logged in...");
+  logger.debug("Checking if user logged in...");
   const username = getUsername();
   if (!username) {
     window.location.replace("/login.html");
     throw new Error("No user logged in, redirecting...");
   }
-  console.log(`User '${username}' is logged in.`);
+  logger.debug(`User '${username}' is logged in.`);
 }
 
 /**
