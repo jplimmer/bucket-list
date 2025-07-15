@@ -3,6 +3,10 @@ import { displayUsername } from "../ui/displayUsername.js";
 import { deleteDream, toggleDreamChecked } from "../services/dreamService.js";
 import { renderDreams } from "../ui/renderDreams.js";
 import { redirectIfNotLoggedIn } from "../services/authService.js";
+import { getLogger } from "../utils/logger.js";
+import { displayError } from "../utils/displayError.js";
+
+const logger = getLogger();
 
 /**
  * Dashboard page controller - manages dream list interactions and user display.
@@ -22,10 +26,11 @@ async function handleDreamDeletion(
 ): Promise<void> {
   try {
     await deleteDream(dreamId);
-    console.log(`Dream ${dreamId} deleted successfully`);
+    logger.info(`Dream ${dreamId} deleted successfully`);
     renderDreams(container);
   } catch (error) {
-    console.error(`Error deleting dream ${dreamId}:`, error);
+    logger.error(`Error deleting dream ${dreamId}:`, error);
+    displayError("Dream could not be removed.");
   }
 }
 
@@ -44,14 +49,15 @@ async function handleDreamToggle(
 
   try {
     await toggleDreamChecked(dreamId, isChecked);
-    console.log(
+    logger.info(
       `Dream ${dreamId} toggled to ${isChecked ? "checked" : "unchecked"}`
     );
   } catch (error) {
-    console.error(`Error toggling dream ${dreamId}:`, error);
+    logger.error(`Error toggling dream ${dreamId}:`, error);
 
     // Rollback checkbox state
     checkbox.checked = previousState;
+    displayError("Dream could not be (un)checked.");
   }
 }
 
@@ -87,19 +93,19 @@ async function handleDreamListClick(e: Event): Promise<void> {
       if (target instanceof HTMLInputElement && target.type === "checkbox") {
         await handleDreamToggle(dreamId, target.checked, target);
       } else {
-        console.error("Toggle action triggered on non-checkbox element.");
+        logger.error("Toggle action triggered on non-checkbox element.");
       }
       break;
 
     default:
-      console.warn("Unknown action:", action);
+      logger.warn("Unknown action:", action);
   }
 }
 
 /**
  * Initialises dashboard with username display and dream list rendering.
  */
-function initaliseDashboardPage(): void {
+function initialiseDashboardPage(): void {
   // Find DOM elements
   const usernameSpan = getRequiredElement<HTMLSpanElement>("#user-name");
   const dreamUl = getRequiredElement<HTMLUListElement>(".dream-list");
@@ -114,4 +120,4 @@ function initaliseDashboardPage(): void {
   dreamUl.addEventListener("click", handleDreamListClick);
 }
 
-initaliseDashboardPage();
+initialiseDashboardPage();
