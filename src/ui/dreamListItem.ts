@@ -1,10 +1,15 @@
 import { Dream } from "../models/types.js";
 import { getRequiredElement } from "../utils/domHelpers.js";
 
+/**
+ * Creates an HTML List Item element for a dream based on an HTML template, with checkbox, label, theme and delete button.
+ * @param dream The dream object to render
+ * @returns The configured HTML list item element
+ */
 export function createDreamListItem(dream: Dream): HTMLLIElement {
   const tpl = getRequiredElement<HTMLTemplateElement>("#dream-tpl");
   const li = tpl.content.firstElementChild!.cloneNode(true) as HTMLLIElement;
-  li.setAttribute("role", "list");
+  // li.setAttribute("role", "list");
 
   li.dataset.id = dream.id.toString();
   const itemId = `dream-check-${dream.id.toString()}`;
