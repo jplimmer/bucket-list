@@ -11,12 +11,25 @@ const logger = getLogger();
  */
 export function redirectIfNotLoggedIn(): void {
   logger.debug("Checking if user logged in...");
-  const username = userStorage.load();
+  const username = loadUsername();
   if (!username) {
     window.location.replace("./login.html");
     throw new Error("No user logged in, redirecting...");
   }
   logger.debug(`User '${username}' is logged in.`);
+}
+
+/**
+ *
+ * @returns
+ */
+export function loadUsername(): string {
+  const username = userStorage.load();
+  if (!username) {
+    logger.error("Username could not be loaded from storage.");
+    return "";
+  }
+  return username;
 }
 
 /**
