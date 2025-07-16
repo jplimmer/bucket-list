@@ -8,9 +8,4 @@ export const defaultThemes = [
   "husdrömmar",
   "sportdrömmar",
   "resdrömmar",
-] as const;
-
-/**
- * Union type of all default dream themes.
- */
-export type DefaultTheme = (typeof defaultThemes)[number];
+];

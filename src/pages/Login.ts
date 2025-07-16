@@ -3,6 +3,7 @@ import { login } from "../services/authService.js";
 import { togglePassword } from "../ui/togglePassword.js";
 import { saveMockDreams } from "../constants/mockData.js";
 import { getLogger } from "../utils/logger.js";
+import { saveDefaultThemes } from "../services/themeService.js";
 
 /**
  * Login page controller - handles form submission and password toggle.
@@ -50,7 +51,10 @@ async function handleLoginSubmit(e: Event): Promise<void> {
     if (!result.success) {
       displayLoginErrors(result.errors, result.suggestion);
     } else {
-      // Set mock variables for user
+      // Set default themes
+      saveDefaultThemes();
+
+      // Set mock dream list for user
       saveMockDreams();
 
       // Redirect to dashboard

@@ -1,7 +1,6 @@
 import { Dream } from "../models/types.js";
-import { displayError } from "../utils/displayError.js";
+import { addDream } from "../services/dreamService.js";
 import { getLogger } from "../utils/logger.js";
-import { dreamStorage } from "../utils/storage.js";
 
 const logger = getLogger();
 
@@ -29,8 +28,11 @@ const dreams: Dream[] = [
 
 /** Saves mock dream data to storage for development/testing purposes. */
 export function saveMockDreams(): void {
-  const saveSuccess = dreamStorage.save(dreams);
-  if (!saveSuccess) {
-    logger.error("Mock dream list not saved.");
+  try {
+    for (const { name, theme } of dreams) {
+      addDream(name, theme);
+    }
+  } catch (error) {
+    logger.error("Mock dreams could not be added:", error);
   }
 }
