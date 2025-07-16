@@ -1,5 +1,5 @@
 import { Dream } from "../models/types.js";
-import { getDreamList } from "../utils/storage.js";
+import { dreamStorage } from "../utils/storage.js";
 import { createDreamListItem } from "./dreamListItem.js";
 import { renderList } from "../utils/renderList.js";
 import { getLogger } from "../utils/logger.js";
@@ -14,7 +14,7 @@ const logger = getLogger();
  */
 export function renderDreams(container: HTMLElement): void {
   try {
-    const dreamList = getDreamList();
+    const dreamList = dreamStorage.load();
 
     if (!dreamList) {
       logger.debug("No dream list found in storage.");

@@ -1,9 +1,8 @@
 /** Maximum allowed length for user input fields. */
 export const INPUT_MAX_LENGTH = 50;
 
-/** File paths for application assets. */
 const iconsRoot = "../assets/icons/";
-
+/** File paths for application assets. */
 export const ASSETS_CONFIG = {
   ICONS: {
     BUCKET_LIST: `${iconsRoot}bucketlistlogo.png`,

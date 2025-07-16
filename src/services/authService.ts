@@ -2,7 +2,7 @@ import { AUTH_CONFIG } from "../constants/authConfig.js";
 import { ERROR_MESSAGES } from "../constants/errorMessages.js";
 import { getLogger } from "../utils/logger.js";
 import { sanitiseInput } from "../utils/sanitiseInput.js";
-import { getUsername, saveUsername } from "../utils/storage.js";
+import { userStorage } from "../utils/storage.js";
 
 const logger = getLogger();
 
@@ -11,7 +11,7 @@ const logger = getLogger();
  */
 export function redirectIfNotLoggedIn(): void {
   logger.debug("Checking if user logged in...");
-  const username = getUsername();
+  const username = userStorage.load();
   if (!username) {
     window.location.replace("./login.html");
     throw new Error("No user logged in, redirecting...");
@@ -70,7 +70,9 @@ export function login(
   }
 
   // Auth success: save username and return 'success: true'
-  const saveSuccess = saveUsername(usernameSanitisationResult.sanitisedInput);
+  const saveSuccess = userStorage.save(
+    usernameSanitisationResult.sanitisedInput
+  );
   if (!saveSuccess) {
     errors.username = "Failed to save username to storage.";
     return { success: false, errors };
