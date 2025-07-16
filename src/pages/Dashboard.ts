@@ -1,19 +1,16 @@
 import { getRequiredElement } from "../utils/domHelpers.js";
 import { displayUsername } from "../ui/displayUsername.js";
 import { deleteDream, toggleDreamChecked } from "../services/dreamService.js";
-import { renderDreams } from "../ui/renderDreams.js";
+import { renderDreams } from "../ui/renderList.js";
 import { redirectIfNotLoggedIn } from "../services/authService.js";
 import { getLogger } from "../utils/logger.js";
-import { displayError } from "../utils/displayError.js";
+import { displayError } from "../ui/displayError.js";
 
 const logger = getLogger();
 
 /**
  * Dashboard page controller - manages dream list interactions and user display.
  */
-
-// Redirect if not logged in
-redirectIfNotLoggedIn();
 
 /**
  * Handles dream deletion with error handling
@@ -103,6 +100,9 @@ function handleDreamListClick(e: Event): void {
  * Initialises Dashboard page with username display and dream list rendering.
  */
 function initialiseDashboardPage(): void {
+  // Redirect if not logged in
+  redirectIfNotLoggedIn();
+
   // Display username in header
   const usernameSpan = getRequiredElement<HTMLSpanElement>("#user-name");
   displayUsername(usernameSpan);
