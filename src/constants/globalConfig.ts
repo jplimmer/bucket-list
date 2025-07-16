@@ -2,9 +2,16 @@
 export const INPUT_MAX_LENGTH = 50;
 
 /** File paths for application assets. */
+const iconsRoot = "../assets/icons/";
+
 export const ASSETS_CONFIG = {
   ICONS: {
-    EYE: "../assets/images/eye-icon.svg",
-    EYE_SLASH: "../assets/images/eye-slash-icon.svg",
+    BUCKET_LIST: `${iconsRoot}bucketlistlogo.png`,
+    SETTINGS_COG: `${iconsRoot}cog_settings.png`,
+    CLOSE_CROSS: `${iconsRoot}cross_close.png`,
+    ADD_PLUS: `${iconsRoot}bucketlistlogo.png`,
+    DELETE_TRASH: `${iconsRoot}trash_delete.png`,
+    EYE: `${iconsRoot}eye-icon.svg`,
+    EYE_SLASH: `${iconsRoot}eye-slash-icon.svg`,
   },
 } as const;

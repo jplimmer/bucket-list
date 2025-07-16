@@ -55,8 +55,8 @@ npx tsc
 
 ```
 ├── assets/
-│   └── images/
-│       └── (image assets)
+│   └── icons/
+│       └── (icon assets)
 ├── pages/
 │   ├── add-dream.html
 │   ├── dashboard.html

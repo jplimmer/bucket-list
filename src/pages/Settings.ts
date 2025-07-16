@@ -13,7 +13,7 @@ const themeList = document.getElementById("theme-list") as HTMLUListElement;
 if (themeList) {
   defaultThemes.forEach((theme) => {
     const li = document.createElement("li");
-    li.innerHTML = `<p>${theme}</p> <img src="../assets/images/trash_delete.png" />`;
+    li.innerHTML = `<p>${theme}</p> <img src="../assets/icons/trash_delete.png" />`;
     themeList.appendChild(li);
   });
 }
