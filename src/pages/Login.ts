@@ -136,7 +136,7 @@ function clearLoginErrors(): void {
 }
 
 /**
- * Initialises login page event listeners and form validation.
+ * Initialises Login page event listeners and form validation.
  */
 function initialiseLoginPage(): void {
   // Add form submission handler
