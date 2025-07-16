@@ -1,4 +1,4 @@
-import { getUsername } from "../utils/storage.js";
+import { userStorage } from "../utils/storage.js";
 
 /**
  * Updates the given container with the current user's name, if available.
@@ -6,6 +6,6 @@ import { getUsername } from "../utils/storage.js";
  * @param container The HTML element where the username should be displayed.
  */
 export function displayUsername(container: HTMLElement): void {
-  const userName = getUsername();
+  const userName = userStorage.load();
   container.textContent = userName ? `, ${userName}` : "";
 }

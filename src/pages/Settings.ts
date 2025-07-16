@@ -1,13 +1,12 @@
 import { defaultThemes } from "../constants/dreamThemes.js";
-import { getUsername } from "../utils/storage.js";
-
+import { userStorage } from "../utils/storage.js";
 import { redirectIfNotLoggedIn } from "../services/authService.js";
 
 // Redirect if not logged in
 redirectIfNotLoggedIn();
 
 const nameInput = document.getElementById("name-input") as HTMLInputElement;
-nameInput.value = getUsername() ?? "";
+nameInput.value = userStorage.load() ?? "";
 
 const themeList = document.getElementById("theme-list") as HTMLUListElement;
 if (themeList) {
