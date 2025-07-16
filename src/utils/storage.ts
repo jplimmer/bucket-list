@@ -14,7 +14,7 @@ export function clearStorage(): boolean {
     STORAGE_CONFIG.STORAGE_TYPE.clear();
     return true;
   } catch (error) {
-    logger.error("Failed to clear localStorage:", error);
+    logger.error(`Failed to clear ${STORAGE_CONFIG.STORAGE_TYPE}:`, error);
     return false;
   }
 }

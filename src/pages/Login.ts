@@ -10,19 +10,15 @@ import { getLogger } from "../utils/logger.js";
 
 const logger = getLogger();
 
-// Find DOM elements
-const loginForm = getRequiredElement<HTMLFormElement>("form");
-const usernameInput = getRequiredElement<HTMLInputElement>("#username");
-const passwordInput = getRequiredElement<HTMLInputElement>("#password");
-const usernameError = getRequiredElement<HTMLParagraphElement>(
-  "#username-error-message"
-);
-const passwordError = getRequiredElement<HTMLParagraphElement>(
-  "#password-error-message"
-);
-
 // State management variable to prevent multiple submits
 let isSubmitting = false;
+
+// Placeholders for elements shared between functions
+let loginForm: HTMLFormElement;
+let usernameInput: HTMLInputElement;
+let passwordInput: HTMLInputElement;
+let usernameError: HTMLParagraphElement;
+let passwordError: HTMLParagraphElement;
 
 /**
  * Handles login form submission with error handling and submission prevention
@@ -139,6 +135,17 @@ function clearLoginErrors(): void {
  * Initialises Login page event listeners and form validation.
  */
 function initialiseLoginPage(): void {
+  // Find and set shared elements for module
+  loginForm = getRequiredElement<HTMLFormElement>("form");
+  usernameInput = getRequiredElement<HTMLInputElement>("#username");
+  passwordInput = getRequiredElement<HTMLInputElement>("#password");
+  usernameError = getRequiredElement<HTMLParagraphElement>(
+    "#username-error-message"
+  );
+  passwordError = getRequiredElement<HTMLParagraphElement>(
+    "#password-error-message"
+  );
+
   // Add form submission handler
   loginForm.addEventListener("submit", handleLoginSubmit);
 
@@ -146,5 +153,5 @@ function initialiseLoginPage(): void {
   loginForm.addEventListener("click", handlePasswordToggle);
 }
 
-// Initialise (called when DOM is ready with "defer")
-initialiseLoginPage();
+// Entry point: sets up DOM elements and event listeners
+document.addEventListener("DOMContentLoaded", initialiseLoginPage);

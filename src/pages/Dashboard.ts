@@ -100,21 +100,20 @@ function handleDreamListClick(e: Event): void {
 }
 
 /**
- * Initialises dashboard with username display and dream list rendering.
+ * Initialises Dashboard page with username display and dream list rendering.
  */
 function initialiseDashboardPage(): void {
-  // Find DOM elements
-  const usernameSpan = getRequiredElement<HTMLSpanElement>("#user-name");
-  const dreamUl = getRequiredElement<HTMLUListElement>(".dream-list");
-
   // Display username in header
+  const usernameSpan = getRequiredElement<HTMLSpanElement>("#user-name");
   displayUsername(usernameSpan);
 
   // Render dream list
+  const dreamUl = getRequiredElement<HTMLUListElement>(".dream-list");
   renderDreams(dreamUl);
 
   // Add dream-list click handler
   dreamUl.addEventListener("click", handleDreamListClick);
 }
 
-initialiseDashboardPage();
+// Entry point: renders dream list and sets up event listeners
+document.addEventListener("DOMContentLoaded", initialiseDashboardPage);
