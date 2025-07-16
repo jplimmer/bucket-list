@@ -1,4 +1,4 @@
-import { displayError } from "./displayError.js";
+import { displayError } from "../ui/displayError.js";
 
 /**
  * Supported log levels.

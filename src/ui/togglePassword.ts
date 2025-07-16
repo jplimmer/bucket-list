@@ -1,5 +1,5 @@
 import { ASSETS_CONFIG } from "../constants/globalConfig.js";
-import { displayError } from "../utils/displayError.js";
+import { displayError } from "./displayError.js";
 import { getRequiredElement } from "../utils/domHelpers.js";
 import { getLogger } from "../utils/logger.js";
 
