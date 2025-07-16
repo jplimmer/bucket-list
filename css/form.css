@@ -41,7 +41,7 @@ button {
     width: 100%;
     background-color: var(--primary-blue);
     color: white;
-    font-size: var(--font-size-base);
+    font-size: 20px;
     font-weight: bold;
     border: none;
     border-radius: var(--border-radius);

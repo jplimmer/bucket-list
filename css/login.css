@@ -24,3 +24,8 @@
  h2 {
     font-size: medium;
  }
+ a {
+   color: var(--primary-red);
+   display: block;
+   text-align: right;
+ }
