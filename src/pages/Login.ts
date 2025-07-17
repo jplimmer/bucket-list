@@ -1,10 +1,10 @@
 import { getRequiredElement } from "../utils/domHelpers.js";
-import { login, redirectIfLoggedIn } from "../services/authService.js";
+import { createNewUser, redirectIfLoggedIn } from "../services/authService.js";
 import { togglePassword } from "../ui/togglePassword.js";
 import { saveMockDreams } from "../constants/mockData.js";
 import { getLogger } from "../utils/logger.js";
 import { saveDefaultThemes } from "../services/themeService.js";
-import { displayError } from "../ui/displayError.js";
+import { clearError, displayError } from "../ui/displayError.js";
 import { clearDreams } from "../services/dreamService.js";
 
 /**
@@ -27,7 +27,7 @@ let isSubmitting = false;
  * Handles login form submission with error handling and submission prevention
  * @param e Form submission event
  */
-async function handleLoginSubmit(e: Event): Promise<void> {
+async function handleLoginSubmit(e: SubmitEvent): Promise<void> {
   e.preventDefault();
 
   // Prevent multiple submissions
@@ -48,7 +48,10 @@ async function handleLoginSubmit(e: Event): Promise<void> {
 
     clearLoginErrors();
 
-    const result = await login(usernameInput.value, passwordInput.value);
+    const result = await createNewUser(
+      usernameInput.value,
+      passwordInput.value
+    );
 
     if (!result.isValid) {
       displayLoginErrors(result.errors, result.suggestion);
@@ -83,7 +86,7 @@ async function handleLoginSubmit(e: Event): Promise<void> {
  * Handles password visibility toggle-button clicks
  * @param e Click event
  */
-function handlePasswordToggle(e: Event): void {
+function handlePasswordToggle(e: MouseEvent): void {
   const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
     ".toggle-password"
   );
@@ -130,14 +133,8 @@ function displayLoginErrors(
  * Clears all login error messages and resets validation states.
  */
 function clearLoginErrors(): void {
-  usernameError.classList.add("hidden");
-  passwordError.classList.add("hidden");
-  usernameError.textContent = "";
-  passwordError.textContent = "";
-
-  // Reset ARIA attributes
-  usernameInput.removeAttribute("aria-invalid");
-  passwordInput.removeAttribute("aria-invalid");
+  clearError(usernameInput, usernameError);
+  clearError(passwordInput, passwordError);
 }
 
 /**

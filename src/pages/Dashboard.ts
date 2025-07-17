@@ -13,14 +13,13 @@ const logger = getLogger();
  */
 
 /**
- * Handles dream deletion with error handling
- * @param container
+ * Handles dream deletion with error handling.
+ * @param container HTML element where dreams are rendered
  * @param dreamId The ID of the dream to delete
  */
 function handleDreamDeletion(container: HTMLElement, dreamId: number): void {
   try {
     deleteDream(dreamId);
-    logger.info(`Dream ${dreamId} deleted successfully`);
     renderDreams(container);
   } catch (error) {
     logger.error(`Error deleting dream ${dreamId}:`, error);
@@ -43,9 +42,6 @@ function handleDreamToggle(
 
   try {
     updateDreamChecked(dreamId, isChecked);
-    logger.info(
-      `Dream ${dreamId} toggled to ${isChecked ? "checked" : "unchecked"}`
-    );
   } catch (error) {
     logger.error(`Error toggling dream ${dreamId}:`, error);
 
@@ -59,13 +55,15 @@ function handleDreamToggle(
  * Handles dream list interactions (delete, toggle check) via event delegation.
  * @param e The click event
  */
-function handleDreamListClick(e: Event): void {
+function handleDreamListClick(e: MouseEvent): void {
   const container = e.currentTarget as HTMLUListElement;
   const target = e.target as HTMLElement;
 
+  // Find parent button of the target
   const btn = target.closest<HTMLElement>("[data-action]");
   if (!btn) return;
 
+  // Find parent list item of the button
   const listItem = btn.closest<HTMLLIElement>("li[data-id]");
   if (!listItem)
     throw new Error(`No list item found for button: ${btn.outerHTML}`);
@@ -97,7 +95,7 @@ function handleDreamListClick(e: Event): void {
 }
 
 /**
- * Initialises Dashboard page with username display and dream list rendering.
+ * Initialises Dashboard page with username display, dream list rendering and event listener.
  */
 function initialiseDashboardPage(): void {
   // Redirect if not logged in

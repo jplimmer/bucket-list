@@ -8,14 +8,16 @@ import { themeExists } from "./themeService.js";
 
 const logger = getLogger();
 
-type CreateDreamResult = CreateResult<Dream>;
-
 /**
  * Clears all dreams from storage.
  * @returns Success status
  */
 export function clearDreams(): boolean {
-  return dreamStorage.clear();
+  const clearSuccess = dreamStorage.clear();
+  if (clearSuccess) {
+    logger.info("Cleared all dreams from storage.");
+  }
+  return clearSuccess;
 }
 
 /**
@@ -52,12 +54,14 @@ function validateDreamInput(name: string, theme: string): ValidationResult {
   };
 }
 
+type CreateDreamResult = CreateResult<Dream>;
+
 /**
- * Creates and saves a new dream
+ * Creates and saves a new dream.
  * @param name Dream name
  * @param theme Dream theme
  * @param isChecked Dream checked status, defaults to false
- * @returns Result with success status, errors, and created dream
+ * @returns Result with success status, errors and created dream
  */
 export function createDream(
   name: string,
@@ -110,11 +114,17 @@ export function deleteDream(id: number): boolean {
   const index = dreamList.findIndex((dream) => dream.id === id);
 
   if (index === -1) {
+    logger.warn(`Failed to find dream id ${id}.`);
     return false;
   }
 
   dreamList.splice(index, 1);
-  return dreamStorage.save(dreamList);
+  const saveSuccess = dreamStorage.save(dreamList);
+
+  if (saveSuccess) {
+    logger.info(`Dream id ${id} deleted successfully.`);
+  }
+  return saveSuccess;
 }
 
 /**
@@ -128,9 +138,15 @@ export function updateDreamChecked(id: number, isChecked: boolean): boolean {
   const dream = dreamList.find((dream) => dream.id === id);
 
   if (!dream) {
+    logger.warn(`Failed to find dream id ${id}.`);
     return false;
   }
 
   dream.isChecked = isChecked;
-  return dreamStorage.save(dreamList);
+  const saveSuccess = dreamStorage.save(dreamList);
+
+  if (saveSuccess) {
+    logger.info(`Updated dream id ${id} to isChecked: ${isChecked}.`);
+  }
+  return saveSuccess;
 }

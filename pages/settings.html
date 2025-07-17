@@ -9,7 +9,6 @@
   </head>
 
   <body>
-    <!-- om du vill göra level-ups -->
     <header>
       <div class="header-top">
         <h1>Inställningar</h1>
@@ -30,34 +29,64 @@
       <p>Här kan du ändra inställningar</p>
     </header>
     <main>
-      <h2>Användarinfo</h2>
-      <div class="change-name">
+      <h2 id="user-info-heading">Användarinfo</h2>
+      <form class="change-name" aria-describedby="user-info-heading">
         <label for="name-input" class="visually-hidden"
           >Ändra användarnamn:</label
         >
-        <input id="name-input" type="text" placeholder="Ditt användarnamn" />
+        <input
+          id="name-input"
+          name="username"
+          type="text"
+          placeholder="Ditt användarnamn"
+        />
         <button
-          type="button"
+          type="submit"
           aria-label="Spara nytt användarnamn"
           class="confirm-input"
         >
           Spara
         </button>
-      </div>
+      </form>
+      <p id="username-error-message" class="error-message hidden" role="alert">
+        Vänligen ange ditt användarnamn.
+      </p>
       <h2>Drömteman</h2>
-      <ul id="theme-list"></ul>
-      <h2>Lägg till nytt tema:</h2>
-      <div class="add-theme">
+      <ul id="theme-list">
+        <!-- Theme list inserted here with Typescript -->
+      </ul>
+      <!-- Template for theme list -->
+      <template id="theme-template">
+        <li class="theme-list__item">
+          <p></p>
+          <button
+            type="button"
+            data-action="delete-theme"
+            aria-label="Ta bort tema"
+          >
+            <img
+              src="../assets/icons/trash_delete.png"
+              alt=""
+              aria-hidden="true"
+            />
+          </button>
+        </li>
+      </template>
+      <h2 id="add-theme-heading">Lägg till nytt tema:</h2>
+      <form class="add-theme" aria-describedby="add-theme-heading">
         <label for="theme-input" class="visually-hidden">Nytt tema:</label>
         <input id="theme-input" type="text" />
         <button
-          type="button"
+          type="submit"
           class="confirm-input"
           aria-label="Lägg till nytt tema"
         >
           Lägg till
         </button>
-      </div>
+      </form>
+      <p id="theme-error-message" class="error-message hidden" role="alert">
+        Vänligen ange ditt tema.
+      </p>
       <button type="button" class="logout">Logga ut</button>
     </main>
   </body>

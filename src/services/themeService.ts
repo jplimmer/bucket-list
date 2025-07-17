@@ -1,5 +1,7 @@
 import { defaultThemes } from "../constants/dreamThemes.js";
+import { CreateResult, ValidationResult } from "../models/common.js";
 import { getLogger } from "../utils/logger.js";
+import { sanitiseInput } from "../utils/sanitiseInput.js";
 import { themeStorage } from "../utils/storage.js";
 
 const logger = getLogger();
@@ -9,7 +11,11 @@ const logger = getLogger();
  * @returns Success status
  */
 export function clearThemes(): boolean {
-  return themeStorage.clear();
+  const clearSuccess = themeStorage.clear();
+  if (clearSuccess) {
+    logger.info("Cleared all themes from storage.");
+  }
+  return clearSuccess;
 }
 
 /**
@@ -29,7 +35,70 @@ export function themeExists(theme: string): boolean {
   return themeList.includes(normalisedTheme);
 }
 
-export function createTheme() {}
+/**
+ * Validates theme creation input.
+ */
+function validateThemeInput(theme: string): ValidationResult {
+  const errors: Record<string, string> = {};
+  let suggestion: string | undefined;
+
+  // Sanitise input
+  const sanitisation = sanitiseInput(theme);
+  if (!sanitisation.isSafe) {
+    errors.theme = sanitisation.issues.join("\n");
+    suggestion = sanitisation.sanitisedInput;
+  }
+
+  // Ensure theme doesn't already exist
+  if (themeExists(sanitisation.sanitisedInput)) {
+    errors.theme = [errors.theme, "Theme already exists."]
+      .filter(Boolean)
+      .join("\n");
+    suggestion = "";
+  }
+
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors,
+    suggestion,
+  };
+}
+
+type CreateThemeResult = CreateResult<string>;
+
+/**
+ * Creates and save a new theme.
+ * @param theme Theme name string
+ * @returns Result with success status, errors and created theme
+ */
+export function createTheme(theme: string): CreateThemeResult {
+  // Validate input
+  const validation = validateThemeInput(theme);
+  if (!validation.isValid) {
+    return {
+      ...validation,
+      data: undefined,
+    };
+  }
+
+  // Load existing themes
+  const themeList = loadThemes();
+
+  // Add new theme to list and save
+  themeList.push(theme);
+  const saveSuccess = themeStorage.save(themeList);
+
+  if (!saveSuccess) {
+    return { isValid: false, errors: { general: "Failed to save them." } };
+  }
+
+  logger.info(`Added theme '${theme}'.`);
+  return {
+    isValid: true,
+    errors: {},
+    data: theme,
+  };
+}
 
 /**
  * Deletes a theme.
@@ -41,11 +110,17 @@ export function deleteTheme(theme: string): boolean {
   const index = themeList.findIndex((t) => t === theme);
 
   if (index === -1) {
+    logger.warn(`Failed to find theme '${theme}'.`);
     return false;
   }
 
   themeList.splice(index, 1);
-  return themeStorage.save(themeList);
+  const saveSuccess = themeStorage.save(themeList);
+
+  if (saveSuccess) {
+    logger.info(`Theme '${theme}' deleted successfully.`);
+  }
+  return saveSuccess;
 }
 
 /**
@@ -64,5 +139,6 @@ export function saveDefaultThemes(): boolean {
       return false;
     }
   }
+  logger.info("Saved default themes.");
   return true;
 }

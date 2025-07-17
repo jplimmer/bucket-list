@@ -36,7 +36,7 @@ export function sanitiseInput(raw: string): SanitisationResult {
       isSafe: false,
       originalInput: raw,
       sanitisedInput: "",
-      issues: ["Input cannot be empty"],
+      issues: ["Input cannot be empty."],
     };
   }
 

@@ -1,6 +1,6 @@
 import { AUTH_CONFIG } from "../constants/authConfig.js";
 import { ERROR_MESSAGES } from "../constants/errorMessages.js";
-import { ValidationResult } from "../models/common.js";
+import { CreateResult, ValidationResult } from "../models/common.js";
 import { getLogger } from "../utils/logger.js";
 import { sanitiseInput } from "../utils/sanitiseInput.js";
 import { userStorage } from "../utils/storage.js";
@@ -40,7 +40,12 @@ export function redirectIfLoggedIn(): void {
  * @returns Success status
  */
 export function clearUsername(): boolean {
-  return userStorage.clear();
+  const clearSuccess = userStorage.clear();
+  if (clearSuccess) {
+    logger.info("Cleared username from storage.");
+  }
+
+  return clearSuccess;
 }
 
 /**
@@ -51,87 +56,70 @@ export function loadUsername(): string {
   return userStorage.load() || "";
 }
 
+type UsernameResult = CreateResult<string>;
+
 /**
- * Sanitises and authenticates user credentials and saves username on success.
- * @param username The username to authenticate
- * @param password The password to authenticate
- * @returns Authentication result with success status, errors, and optional 'corrected' suggestion for username
+ * Validates and saves a username.
+ * @param username New username string
+ * @returns Result with success status, errors and updated Username
  */
-export function login(username: string, password: string): ValidationResult {
-  // Create errors object to return if auth fails
-  const errors: Record<string, string> = {};
-  let suggestion = "";
-
-  // Sanitise user inputs
-  const usernameSanitisationResult = sanitiseInput(username);
-  const passwordSanitisationResult = sanitiseInput(password);
-
-  if (!usernameSanitisationResult.isSafe) {
-    errors.username = usernameSanitisationResult.issues.join("\n");
-    suggestion = usernameSanitisationResult.sanitisedInput;
+export function updateUsername(username: string): UsernameResult {
+  // Validate input
+  const validation = validateUsername(username);
+  if (!validation.isValid) {
+    return {
+      ...validation,
+      data: undefined,
+    };
   }
 
-  if (!passwordSanitisationResult.isSafe) {
-    errors.password = passwordSanitisationResult.issues.join("\n");
-  }
-
-  // Validate sanitised inputs according to businesss logic
-  const usernameValidation = validateUsername(
-    usernameSanitisationResult.sanitisedInput
-  );
-  const passwordValidation = validatePassword(
-    passwordSanitisationResult.sanitisedInput
-  );
-
-  if (!usernameValidation.success) {
-    // Use validation errors unless sanitisation errors already exist
-    errors.usernames ||= usernameValidation.errors.join("\n");
-  }
-
-  if (!passwordValidation.success) {
-    // Use validation errors unless sanitisation errors already exist
-    errors.password ||= passwordValidation.errors.join("\n");
-  }
-
-  // Auth fail: return 'success: false' and errors
-  if (Object.keys(errors).length > 0) {
-    return { isValid: false, errors, suggestion };
-  }
-
-  // Auth success: save username and return 'success: true'
-  const saveSuccess = userStorage.save(
-    usernameSanitisationResult.sanitisedInput
-  );
+  // Save new username
+  const saveSuccess = userStorage.save(username);
   if (!saveSuccess) {
-    errors.username = "Failed to save username to storage.";
-    return { isValid: false, errors };
+    return { isValid: false, errors: { general: "Failed to save username." } };
   }
 
-  return { isValid: true, errors };
+  logger.info("Username updated successfully.");
+  return { isValid: true, errors: {}, data: username };
 }
 
 /**
- * Validates username according to authentication rules.
+ * Sanitises and validates username according to authentication rules.
  * @param username The username to validate
  * @returns Validation result with success status and error messages
  */
-export function validateUsername(username: string): {
-  success: boolean;
-  errors: string[];
-} {
-  const errors = [];
+export function validateUsername(username: string): ValidationResult {
+  const errors: Record<string, string> = {};
+  let suggestion: string | undefined;
 
-  if (username.length < AUTH_CONFIG.USERNAME_MIN_LENGTH) {
-    errors.push(ERROR_MESSAGES.USERNAME_TOO_SHORT);
+  // Sanitise input
+  const sanitisation = sanitiseInput(username);
+  if (!sanitisation.isSafe) {
+    errors.username = sanitisation.issues.join("\n");
+    suggestion = sanitisation.sanitisedInput;
   }
 
-  // Auth fail: return 'success: false' and errors
-  if (Object.keys(errors).length > 0) {
-    return { success: false, errors };
+  const cleanUsername = sanitisation.sanitisedInput;
+
+  // Validate sanitised username according to business logic
+  if (cleanUsername.length < AUTH_CONFIG.USERNAME_MIN_LENGTH) {
+    errors.username = [errors.username, ERROR_MESSAGES.USERNAME_TOO_SHORT]
+      .filter(Boolean)
+      .join("\n");
+  }
+  // Check for spaces and replace with underscores
+  if (/\s/.test(cleanUsername)) {
+    errors.username = [errors.username, ERROR_MESSAGES.CONTAINS_SPACES]
+      .filter(Boolean)
+      .join("\n");
+    suggestion = cleanUsername.replace(/\s/g, "_");
   }
 
-  // Auth success: return 'success: true'
-  return { success: true, errors };
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors,
+    suggestion,
+  };
 }
 
 /**
@@ -140,25 +128,73 @@ export function validateUsername(username: string): {
  * @returns Validation result with success status and error messages
  */
 
-export function validatePassword(password: string): {
-  success: boolean;
-  errors: string[];
-} {
-  const errors = [];
+export function validatePassword(password: string): ValidationResult {
+  const errors: Record<string, string> = {};
 
+  // Sanitise input and return if failed
+  const sanitisation = sanitiseInput(password);
+  if (!sanitisation.isSafe) {
+    errors.password = sanitisation.issues.join("\n");
+    return {
+      isValid: false,
+      errors,
+    };
+  }
+
+  // Validate safe password according to business logic
   if (password.length < AUTH_CONFIG.PASSWORD_MIN_LENGTH) {
-    errors.push(ERROR_MESSAGES.PASSWORD_TOO_SHORT);
+    errors.password = [errors.password, ERROR_MESSAGES.PASSWORD_TOO_SHORT]
+      .filter(Boolean)
+      .join("\n");
   }
-
   if (AUTH_CONFIG.PASSWORD_MUST_CONTAIN_NUMBER && !/\d/.test(password)) {
-    errors.push(ERROR_MESSAGES.PASSWORD_REQUIRES_NUMBER);
+    errors.password = [errors.password, ERROR_MESSAGES.PASSWORD_REQUIRES_NUMBER]
+      .filter(Boolean)
+      .join("\n");
+  }
+  // Check for spaces and replace with underscores
+  if (/\s/.test(password)) {
+    errors.username = [errors.username, ERROR_MESSAGES.CONTAINS_SPACES]
+      .filter(Boolean)
+      .join("\n");
   }
 
-  // Auth fail: return 'success: false' and errors
-  if (Object.keys(errors).length > 0) {
-    return { success: false, errors };
-  }
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors,
+  };
+}
 
-  // Auth success: return 'success: true'
-  return { success: true, errors };
+/**
+ * Sanitises and authenticates user credentials and updates username on success.
+ * @param username The username to authenticate
+ * @param password The password to authenticate
+ * @returns Authentication result with success status, errors, and optional 'corrected' suggestion for username
+ */
+export function createNewUser(
+  username: string,
+  password: string
+): ValidationResult {
+  // Create errors object to return if auth fails
+  const saveUsername = updateUsername(username);
+  const passwordValidation = validatePassword(password);
+
+  if (saveUsername.isValid && passwordValidation.isValid) {
+    logger.info("Successfully created new user.");
+    return {
+      isValid: true,
+      errors: {},
+    };
+  } else {
+    // Clear username if successfully saved.
+    userStorage.clear();
+    return {
+      isValid: false,
+      errors: {
+        username: saveUsername.errors.username,
+        password: passwordValidation.errors.password,
+      },
+      suggestion: saveUsername.suggestion,
+    };
+  }
 }

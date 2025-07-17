@@ -9,6 +9,10 @@ import { loadThemes } from "../services/themeService.js";
 
 const logger = getLogger();
 
+/**
+ * AddDream page controller - manages adding of new dreams and user display.
+ */
+
 // Placeholders for elements shared between functions
 let addDreamForm: HTMLFormElement;
 let dreamInput: HTMLInputElement;
@@ -42,7 +46,11 @@ function populateThemes(container: HTMLSelectElement) {
   }
 }
 
-function handleAddDreamSubmit(e: Event): void {
+/**
+ * Handles add dream submission with error handling and submission prevention.
+ * @param e Form submission event
+ */
+function handleAddDreamSubmit(e: SubmitEvent): void {
   e.preventDefault();
 
   // Prevent multiple submissions
