@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project is a frontend Typescript exercise focused on DOM manipulation and interactive UI development. Based on a pre-designed HTML & CSS template, **Bucket List** allows users to create and organise their personal goals and dreams.
+This project is a frontend Typescript exercise focused on DOM manipulation, interactive UI development and project structure. Based on a pre-designed HTML & CSS template, **Bucket List** allows users to create and organise their personal goals and dreams.
 
 <table>
     <tr>
@@ -68,6 +68,9 @@ npx tsc
 │   ├── models/
 │   ├── pages/
 │   ├── services/
+│       ├── authService.ts
+│       ├── dreamService.ts
+│       └── themeService.ts
 │   ├── ui/
 │   └── utils/
 ├── styles/
