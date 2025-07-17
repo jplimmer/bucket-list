@@ -65,12 +65,6 @@ export function sanitiseInput(raw: string): SanitisationResult {
     issues.push("Leading or trailing whitespace trimmed.");
   }
 
-  // Check for spaces and replace with underscores
-  if (/\s/.test(sanitised)) {
-    issues.push("Spaces detected and replaced with underscores.");
-    sanitised = sanitised.replace(/\s/g, "_");
-  }
-
   // Check length
   if (sanitised.length > INPUT_MAX_LENGTH) {
     issues.push(
