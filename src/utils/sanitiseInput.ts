@@ -36,7 +36,7 @@ export function sanitiseInput(raw: string): SanitisationResult {
       isSafe: false,
       originalInput: raw,
       sanitisedInput: "",
-      issues: ["Input cannot be empty"],
+      issues: ["Input cannot be empty."],
     };
   }
 
@@ -63,6 +63,12 @@ export function sanitiseInput(raw: string): SanitisationResult {
 
   if (beforeTrim !== sanitised) {
     issues.push("Leading or trailing whitespace trimmed.");
+  }
+
+  // Check for spaces and replace with underscores
+  if (/\s/.test(sanitised)) {
+    issues.push("Spaces detected and replaced with underscores.");
+    sanitised = sanitised.replace(/\s/g, "_");
   }
 
   // Check length
