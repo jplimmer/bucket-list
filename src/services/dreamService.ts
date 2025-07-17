@@ -8,8 +8,6 @@ import { themeExists } from "./themeService.js";
 
 const logger = getLogger();
 
-type CreateDreamResult = CreateResult<Dream>;
-
 /**
  * Clears all dreams from storage.
  * @returns Success status
@@ -56,12 +54,14 @@ function validateDreamInput(name: string, theme: string): ValidationResult {
   };
 }
 
+type CreateDreamResult = CreateResult<Dream>;
+
 /**
- * Creates and saves a new dream
+ * Creates and saves a new dream.
  * @param name Dream name
  * @param theme Dream theme
  * @param isChecked Dream checked status, defaults to false
- * @returns Result with success status, errors, and created dream
+ * @returns Result with success status, errors and created dream
  */
 export function createDream(
   name: string,

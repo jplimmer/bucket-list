@@ -20,7 +20,6 @@ const logger = getLogger();
 function handleDreamDeletion(container: HTMLElement, dreamId: number): void {
   try {
     deleteDream(dreamId);
-    logger.info(`Dream ${dreamId} deleted successfully`);
     renderDreams(container);
   } catch (error) {
     logger.error(`Error deleting dream ${dreamId}:`, error);
@@ -43,9 +42,6 @@ function handleDreamToggle(
 
   try {
     updateDreamChecked(dreamId, isChecked);
-    logger.info(
-      `Dream ${dreamId} toggled to ${isChecked ? "checked" : "unchecked"}`
-    );
   } catch (error) {
     logger.error(`Error toggling dream ${dreamId}:`, error);
 
@@ -59,7 +55,7 @@ function handleDreamToggle(
  * Handles dream list interactions (delete, toggle check) via event delegation.
  * @param e The click event
  */
-function handleDreamListClick(e: Event): void {
+function handleDreamListClick(e: MouseEvent): void {
   const container = e.currentTarget as HTMLUListElement;
   const target = e.target as HTMLElement;
 

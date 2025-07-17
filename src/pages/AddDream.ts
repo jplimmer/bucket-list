@@ -46,7 +46,11 @@ function populateThemes(container: HTMLSelectElement) {
   }
 }
 
-function handleAddDreamSubmit(e: Event): void {
+/**
+ * Handles add dream submission with error handling and submission prevention.
+ * @param e Form submission event
+ */
+function handleAddDreamSubmit(e: SubmitEvent): void {
   e.preventDefault();
 
   // Prevent multiple submissions

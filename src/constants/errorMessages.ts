@@ -3,7 +3,7 @@ import { AUTH_CONFIG } from "./authConfig.js";
 /** User-facing error messages for authentication validation. */
 export const ERROR_MESSAGES = {
   /** Error shown when input contains spaces. */
-  CONTAINS_SPACES: "Spaces detected and replaced with underscores.",
+  CONTAINS_SPACES: "Input cannot contain spaces.",
   /** Error shown when username is too short. */
   USERNAME_TOO_SHORT: `Username must be at least ${AUTH_CONFIG.USERNAME_MIN_LENGTH} character(s).`,
   /** Error shown when password is too short. */
