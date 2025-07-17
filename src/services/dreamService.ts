@@ -15,7 +15,11 @@ type CreateDreamResult = CreateResult<Dream>;
  * @returns Success status
  */
 export function clearDreams(): boolean {
-  return dreamStorage.clear();
+  const clearSuccess = dreamStorage.clear();
+  if (clearSuccess) {
+    logger.info("Cleared all dreams from storage.");
+  }
+  return clearSuccess;
 }
 
 /**
@@ -110,11 +114,17 @@ export function deleteDream(id: number): boolean {
   const index = dreamList.findIndex((dream) => dream.id === id);
 
   if (index === -1) {
+    logger.warn(`Failed to find dream id ${id}.`);
     return false;
   }
 
   dreamList.splice(index, 1);
-  return dreamStorage.save(dreamList);
+  const saveSuccess = dreamStorage.save(dreamList);
+
+  if (saveSuccess) {
+    logger.info(`Dream id ${id} deleted successfully.`);
+  }
+  return saveSuccess;
 }
 
 /**
@@ -128,9 +138,15 @@ export function updateDreamChecked(id: number, isChecked: boolean): boolean {
   const dream = dreamList.find((dream) => dream.id === id);
 
   if (!dream) {
+    logger.warn(`Failed to find dream id ${id}.`);
     return false;
   }
 
   dream.isChecked = isChecked;
-  return dreamStorage.save(dreamList);
+  const saveSuccess = dreamStorage.save(dreamList);
+
+  if (saveSuccess) {
+    logger.info(`Updated dream id ${id} to isChecked: ${isChecked}.`);
+  }
+  return saveSuccess;
 }

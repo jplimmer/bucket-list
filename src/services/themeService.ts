@@ -9,7 +9,11 @@ const logger = getLogger();
  * @returns Success status
  */
 export function clearThemes(): boolean {
-  return themeStorage.clear();
+  const clearSuccess = themeStorage.clear();
+  if (clearSuccess) {
+    logger.info("Cleared all themes from storage.");
+  }
+  return clearSuccess;
 }
 
 /**
@@ -41,11 +45,17 @@ export function deleteTheme(theme: string): boolean {
   const index = themeList.findIndex((t) => t === theme);
 
   if (index === -1) {
+    logger.warn(`Failed to find theme '${theme}'.`);
     return false;
   }
 
   themeList.splice(index, 1);
-  return themeStorage.save(themeList);
+  const saveSuccess = themeStorage.save(themeList);
+
+  if (saveSuccess) {
+    logger.info(`Theme '${theme}' deleted successfully.`);
+  }
+  return saveSuccess;
 }
 
 /**
@@ -64,5 +74,6 @@ export function saveDefaultThemes(): boolean {
       return false;
     }
   }
+  logger.info("Saved default themes.");
   return true;
 }

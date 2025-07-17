@@ -13,8 +13,8 @@ const logger = getLogger();
  */
 
 /**
- * Handles dream deletion with error handling
- * @param container
+ * Handles dream deletion with error handling.
+ * @param container HTML element where dreams are rendered
  * @param dreamId The ID of the dream to delete
  */
 function handleDreamDeletion(container: HTMLElement, dreamId: number): void {
@@ -63,9 +63,11 @@ function handleDreamListClick(e: Event): void {
   const container = e.currentTarget as HTMLUListElement;
   const target = e.target as HTMLElement;
 
+  // Find parent button of the target
   const btn = target.closest<HTMLElement>("[data-action]");
   if (!btn) return;
 
+  // Find parent list item of the button
   const listItem = btn.closest<HTMLLIElement>("li[data-id]");
   if (!listItem)
     throw new Error(`No list item found for button: ${btn.outerHTML}`);
@@ -97,7 +99,7 @@ function handleDreamListClick(e: Event): void {
 }
 
 /**
- * Initialises Dashboard page with username display and dream list rendering.
+ * Initialises Dashboard page with username display, dream list rendering and event listener.
  */
 function initialiseDashboardPage(): void {
   // Redirect if not logged in
