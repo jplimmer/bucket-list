@@ -1,4 +1,4 @@
-import { Dream } from "../models/types.js";
+import { Dream } from "../models/domain.js";
 import { createDreamListItem } from "./dreamListItem.js";
 import { getLogger } from "../utils/logger.js";
 import { displayError } from "./displayError.js";

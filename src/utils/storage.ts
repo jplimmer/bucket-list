@@ -3,7 +3,7 @@ import {
   STORAGE_KEYS,
   StorageKey,
 } from "../constants/storageConfig.js";
-import { Dream } from "../models/types.js";
+import { Dream } from "../models/domain.js";
 import { getLogger } from "./logger.js";
 import { sanitiseInput } from "./sanitiseInput.js";
 

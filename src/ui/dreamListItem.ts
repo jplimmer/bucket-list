@@ -1,4 +1,4 @@
-import { Dream } from "../models/types.js";
+import { Dream } from "../models/domain.js";
 import { getRequiredElement } from "../utils/domHelpers.js";
 
 /**
