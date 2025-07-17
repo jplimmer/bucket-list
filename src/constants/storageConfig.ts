@@ -1,7 +1,7 @@
 /** Storage type for persisting user data. */
 export const STORAGE_CONFIG = {
   /** Type of storage to use for saving data. */
-  STORAGE_TYPE: localStorage,
+  STORAGE_TYPE: sessionStorage,
 } as const;
 
 /** Storage keys for persisting user data. */
