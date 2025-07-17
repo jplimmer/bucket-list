@@ -9,6 +9,10 @@ import { loadThemes } from "../services/themeService.js";
 
 const logger = getLogger();
 
+/**
+ * AddDream page controller - manages adding of new dreams and user display.
+ */
+
 // Placeholders for elements shared between functions
 let addDreamForm: HTMLFormElement;
 let dreamInput: HTMLInputElement;

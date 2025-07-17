@@ -46,6 +46,25 @@ li p {
   grid-template-columns: 3fr 1fr;
 }
 
+.theme-list__item {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  button {
+    display: grid;
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  button:hover img {
+    animation: shake 0.3s;
+  }
+}
+
 @keyframes shake {
   0% {
     transform: translate(0);

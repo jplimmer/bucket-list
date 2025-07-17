@@ -1,8 +1,9 @@
 import { Dream } from "../models/domain.js";
-import { createDreamListItem } from "./dreamListItem.js";
+import { createDreamListItem, createThemeListItem } from "./createListItem.js";
 import { getLogger } from "../utils/logger.js";
 import { displayError } from "./displayError.js";
 import { loadDreams } from "../services/dreamService.js";
+import { loadThemes } from "../services/themeService.js";
 
 const logger = getLogger();
 
@@ -39,5 +40,20 @@ export function renderDreams(container: HTMLElement): void {
   } catch (error) {
     logger.error("Failed to render dreams:", error);
     displayError("Dreams could not be displayed, try refreshing the page.");
+  }
+}
+
+/**
+ * Renders the complete themes list into the specified container element.
+ * @param container The HTML element to render the themes list into
+ * @throws Error when no theme list is found in storage
+ */
+export function renderThemes(container: HTMLElement): void {
+  try {
+    const themeList = loadThemes();
+    renderList<string>(container, themeList, createThemeListItem);
+  } catch (error) {
+    logger.error("Failed to render themes:", error);
+    displayError("Themes could not be displayed, try refreshing the page.");
   }
 }

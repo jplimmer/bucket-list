@@ -9,7 +9,6 @@
   </head>
 
   <body>
-    <!-- om du vill göra level-ups -->
     <header>
       <div class="header-top">
         <h1>Inställningar</h1>
@@ -45,7 +44,26 @@
         </button>
       </div>
       <h2>Drömteman</h2>
-      <ul id="theme-list"></ul>
+      <ul id="theme-list">
+        <!-- Theme list inserted here with Typescript -->
+      </ul>
+      <!-- Template for theme list -->
+      <template id="theme-template">
+        <li class="theme-list__item">
+          <p></p>
+          <button
+            type="button"
+            data-action="delete-theme"
+            aria-label="Ta bort tema"
+          >
+            <img
+              src="../assets/icons/trash_delete.png"
+              alt=""
+              aria-hidden="true"
+            />
+          </button>
+        </li>
+      </template>
       <h2>Lägg till nytt tema:</h2>
       <div class="add-theme">
         <label for="theme-input" class="visually-hidden">Nytt tema:</label>
