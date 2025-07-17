@@ -1,9 +1,10 @@
+import { ValidationResult } from "../models/common.js";
 import {
   loadUsername,
   redirectIfNotLoggedIn,
   updateUsername,
 } from "../services/authService.js";
-import { deleteTheme } from "../services/themeService.js";
+import { createTheme, deleteTheme } from "../services/themeService.js";
 import { displayError, clearError } from "../ui/displayError.js";
 import { renderThemes } from "../ui/renderList.js";
 import { getRequiredElement } from "../utils/domHelpers.js";
@@ -23,6 +24,7 @@ let nameButton: HTMLButtonElement;
 let nameError: HTMLParagraphElement;
 let themeUl: HTMLUListElement;
 let themeForm: HTMLFormElement;
+let themeInput: HTMLInputElement;
 let themeButton: HTMLButtonElement;
 let themeError: HTMLParagraphElement;
 
@@ -52,7 +54,7 @@ function handleUsernameSubmit(e: SubmitEvent): void {
     const result = updateUsername(nameInput.value);
 
     if (!result.isValid) {
-      displayNameError(result.errors, result.suggestion);
+      displayNameError(result);
     } else {
       // Display success message in name button temporarily
       nameButton.textContent = "Sparat!";
@@ -123,6 +125,40 @@ function handleThemeListClick(e: MouseEvent): void {
 
 function handleAddThemeSubmit(e: SubmitEvent) {
   e.preventDefault();
+
+  // Prevent multiple submissions
+  if (isSubmitting) return;
+
+  isSubmitting = true;
+
+  try {
+    // Disable theme button during request
+    themeButton.disabled = true;
+    themeButton.textContent = "Sparar...";
+
+    // Clear previous errors
+    clearError(themeInput, themeError);
+
+    const result = createTheme(themeInput.value);
+
+    if (!result.isValid) {
+      displayThemeError(result);
+    } else {
+      // Display success message in theme button temporarily
+      themeButton.textContent = "Sparat!";
+      themeButton.classList.add("bg-secondary-blue");
+
+      // Re-enable theme button after timeout
+      setTimeout(() => {
+        resetThemeButton();
+      }, 2000);
+    }
+  } catch (error) {
+    logger.error("Add theme error:", error);
+    resetThemeButton();
+  } finally {
+    isSubmitting = false;
+  }
 }
 
 /**
@@ -130,17 +166,38 @@ function handleAddThemeSubmit(e: SubmitEvent) {
  * @param errors Object containing field-specific error messages
  * @param suggestion Optional suggested username to replace invalid input
  */
-function displayNameError(
-  errors: Record<string, string>,
-  suggestion?: string
-): void {
-  // Reset nameButton
+function displayNameError({ errors, suggestion }: ValidationResult): void {
   resetNameButton();
 
   if (errors.username) {
     nameError.textContent = errors.username;
     nameError.classList.remove("hidden");
     nameInput.setAttribute("aria-invalid", "true");
+  }
+
+  if (errors.username && suggestion) {
+    nameInput.value = suggestion;
+    nameInput.select();
+  }
+}
+
+/**
+ * Displays theme validation errors and applies suggestion if available.
+ * @param errors Object containing field-specific error messages
+ * @param suggestion Optional suggested theme to replace invalid input
+ */
+function displayThemeError({ errors, suggestion }: ValidationResult): void {
+  resetThemeButton();
+
+  if (errors.theme) {
+    themeError.textContent = errors.theme;
+    themeError.classList.remove("hidden");
+    themeInput.setAttribute("aria-invalid", "true");
+  }
+
+  if (errors.theme && suggestion) {
+    themeInput.value = suggestion;
+    themeInput.select();
   }
 }
 
@@ -189,6 +246,7 @@ function initialiseSettingsPage(): void {
   );
   themeUl = getRequiredElement<HTMLUListElement>("#theme-list");
   themeForm = getRequiredElement<HTMLFormElement>(".add-theme");
+  themeInput = getRequiredElement<HTMLInputElement>("#theme-input");
   themeButton = getRequiredElement<HTMLButtonElement>(
     'button[type="submit"]',
     themeForm
