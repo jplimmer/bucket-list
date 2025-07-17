@@ -30,21 +30,16 @@
     </header>
     <main>
       <h2>Lägg till en ny dröm</h2>
-      <form>
+      <form id="add-dream">
         <label for="dream">Dröm:</label>
         <input
           type="text"
           id="dream"
           placeholder="Ex. Besök Machu Picchu"
           aria-describedby="dream-error-message"
-          required
+          autofocus
         />
-        <p
-          id="dream-error-message"
-          class="error-message"
-          role="alert"
-          style="display: none"
-        >
+        <p id="dream-error-message" class="error-message hidden" role="alert">
           Vänligen ange vad du drömmer om.
         </p>
         <label for="dream-select">Tema:</label>
@@ -52,21 +47,11 @@
           id="dream-select"
           name="dream"
           aria-describedby="theme-error-message"
-          required
         >
           <!-- Level-up: generera options efter tema-listans innehåll -->
           <option value="">-- Välj ett tema --</option>
-          <option value="teknik">Teknikdrömmar</option>
-          <option value="vardag">Vardagsdrömmar</option>
-          <option value="hus">Husdrömmar</option>
-          <option value="sport">Sportdrömmar</option>
         </select>
-        <p
-          id="theme-error-message"
-          class="error-message"
-          role="alert"
-          style="display: none"
-        >
+        <p id="theme-error-message" class="error-message hidden" role="alert">
           Vänligen välj ett tema för din dröm.
         </p>
         <button type="submit">Lägg till</button>
