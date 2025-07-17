@@ -1,9 +1,11 @@
 import { getRequiredElement } from "../utils/domHelpers.js";
-import { login } from "../services/authService.js";
+import { login, redirectIfLoggedIn } from "../services/authService.js";
 import { togglePassword } from "../ui/togglePassword.js";
 import { saveMockDreams } from "../constants/mockData.js";
 import { getLogger } from "../utils/logger.js";
 import { saveDefaultThemes } from "../services/themeService.js";
+import { displayError } from "../ui/displayError.js";
+import { clearDreams } from "../services/dreamService.js";
 
 /**
  * Login page controller - handles form submission and password toggle.
@@ -11,15 +13,15 @@ import { saveDefaultThemes } from "../services/themeService.js";
 
 const logger = getLogger();
 
-// State management variable to prevent multiple submits
-let isSubmitting = false;
-
 // Placeholders for elements shared between functions
 let loginForm: HTMLFormElement;
 let usernameInput: HTMLInputElement;
 let passwordInput: HTMLInputElement;
 let usernameError: HTMLParagraphElement;
 let passwordError: HTMLParagraphElement;
+
+// State management variable to prevent multiple submits
+let isSubmitting = false;
 
 /**
  * Handles login form submission with error handling and submission prevention
@@ -48,13 +50,15 @@ async function handleLoginSubmit(e: Event): Promise<void> {
 
     const result = await login(usernameInput.value, passwordInput.value);
 
-    if (!result.success) {
+    if (!result.isValid) {
       displayLoginErrors(result.errors, result.suggestion);
     } else {
-      // Set default themes
+      // Reset default themes
       saveDefaultThemes();
 
-      // Set mock dream list for user
+      // Reset mock dream list for user
+      if (!clearDreams())
+        throw new Error("Failed to clear dreams from storage.");
       saveMockDreams();
 
       // Redirect to dashboard
@@ -63,6 +67,7 @@ async function handleLoginSubmit(e: Event): Promise<void> {
     }
   } catch (error) {
     logger.error("Login error:", error);
+    displayError("Login error:" + error);
   } finally {
     isSubmitting = false;
 
@@ -139,6 +144,9 @@ function clearLoginErrors(): void {
  * Initialises Login page event listeners and form validation.
  */
 function initialiseLoginPage(): void {
+  // Redirect if user already logged in
+  redirectIfLoggedIn();
+
   // Find and set shared elements for module
   loginForm = getRequiredElement<HTMLFormElement>("form");
   usernameInput = getRequiredElement<HTMLInputElement>("#username");

@@ -1,35 +1,54 @@
 import { AUTH_CONFIG } from "../constants/authConfig.js";
 import { ERROR_MESSAGES } from "../constants/errorMessages.js";
+import { ValidationResult } from "../models/common.js";
 import { getLogger } from "../utils/logger.js";
 import { sanitiseInput } from "../utils/sanitiseInput.js";
 import { userStorage } from "../utils/storage.js";
 
 const logger = getLogger();
 
-/** Redirects to login page if no user is currently logged in.
- * @throws Error when no user is logged in
+/**
+ * WRedirects to login page if no user is currently logged in.
  */
 export function redirectIfNotLoggedIn(): void {
   logger.debug("Checking if user logged in...");
   const username = loadUsername();
   if (!username) {
     window.location.replace("./login.html");
-    throw new Error("No user logged in, redirecting...");
+    // Throw to prevent further execution on previous page
+    throw new Error("No user logged in, redirecting to login page...");
   }
   logger.debug(`User '${username}' is logged in.`);
 }
 
 /**
- *
- * @returns
+ * Redirects to dashboard if user is already logged in.
+ */
+export function redirectIfLoggedIn(): void {
+  logger.debug("Checking if user logged in...");
+  const username = loadUsername();
+  if (username) {
+    window.location.replace("./dashboard.html");
+    // Throw to prevent further execution on previous page
+    throw new Error("User already logged in, redirecting to dashboard...");
+  }
+  logger.debug("No user currently logged in.");
+}
+
+/**
+ * Clears username from storage.
+ * @returns Success status
+ */
+export function clearUsername(): boolean {
+  return userStorage.clear();
+}
+
+/**
+ * Loads username from storage.
+ * @returns Username string, or empty string if loading fails.
  */
 export function loadUsername(): string {
-  const username = userStorage.load();
-  if (!username) {
-    logger.error("Username could not be loaded from storage.");
-    return "";
-  }
-  return username;
+  return userStorage.load() || "";
 }
 
 /**
@@ -38,13 +57,10 @@ export function loadUsername(): string {
  * @param password The password to authenticate
  * @returns Authentication result with success status, errors, and optional 'corrected' suggestion for username
  */
-export function login(
-  username: string,
-  password: string
-): { success: boolean; errors: Record<string, string>; suggestion?: string } {
+export function login(username: string, password: string): ValidationResult {
   // Create errors object to return if auth fails
-  let suggestion = "";
   const errors: Record<string, string> = {};
+  let suggestion = "";
 
   // Sanitise user inputs
   const usernameSanitisationResult = sanitiseInput(username);
@@ -79,7 +95,7 @@ export function login(
 
   // Auth fail: return 'success: false' and errors
   if (Object.keys(errors).length > 0) {
-    return { success: false, errors, suggestion };
+    return { isValid: false, errors, suggestion };
   }
 
   // Auth success: save username and return 'success: true'
@@ -88,10 +104,10 @@ export function login(
   );
   if (!saveSuccess) {
     errors.username = "Failed to save username to storage.";
-    return { success: false, errors };
+    return { isValid: false, errors };
   }
 
-  return { success: true, errors };
+  return { isValid: true, errors };
 }
 
 /**
