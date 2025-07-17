@@ -1,86 +1,136 @@
-import { Dream } from "../models/types.js";
+import { ValidationResult, CreateResult } from "../models/common.js";
+import { Dream } from "../models/domain.js";
 import { generateId } from "../utils/generateId.js";
 import { getLogger } from "../utils/logger.js";
+import { sanitiseInput } from "../utils/sanitiseInput.js";
 import { dreamStorage } from "../utils/storage.js";
+import { themeExists } from "./themeService.js";
 
 const logger = getLogger();
 
+type CreateDreamResult = CreateResult<Dream>;
+
 /**
- *
- * @returns An array of `Dream` objects or an empty array
+ * Clears all dreams from storage.
+ * @returns Success status
  */
-export function loadDreams(): Dream[] {
-  const dreamList = dreamStorage.load();
-  if (!dreamList) {
-    logger.error("Dream list could not be loaded from storage.");
-    return [];
-  }
-  return dreamList;
+export function clearDreams(): boolean {
+  return dreamStorage.clear();
 }
 
 /**
- * Finds the index of a dream in the dream list by ID.
- * @param dreamList The list of dreams to search
- * @param id The ID of the dream to find
- * @returns The index of the dream in the list
- * @throws Error when no matching dream ID is found
+ * Loads all dreams from storage.
+ * @returns Array of `Dream` objects, or empty array if loading fails
  */
-function getDreamIndex(dreamList: Dream[], id: number): number {
+export function loadDreams(): Dream[] {
+  return dreamStorage.load() || [];
+}
+
+/**
+ * Validates dream creation input.
+ */
+function validateDreamInput(name: string, theme: string): ValidationResult {
+  const errors: Record<string, string> = {};
+  let suggestion: string | undefined;
+
+  // Validate name
+  const nameCheck = sanitiseInput(name);
+  if (!nameCheck.isSafe) {
+    errors.dreamName = nameCheck.issues.join("\n");
+    suggestion = nameCheck.sanitisedInput;
+  }
+
+  // Validate theme exists
+  if (!themeExists(theme)) {
+    errors.dreamTheme = "Theme does not exist.";
+  }
+
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors,
+    suggestion,
+  };
+}
+
+/**
+ * Creates and saves a new dream
+ * @param name Dream name
+ * @param theme Dream theme
+ * @param isChecked Dream checked status, defaults to false
+ * @returns Result with success status, errors, and created dream
+ */
+export function createDream(
+  name: string,
+  theme: string,
+  isChecked: boolean = false
+): CreateDreamResult {
+  // Validate input
+  const validation = validateDreamInput(name, theme);
+  if (!validation.isValid) {
+    return {
+      ...validation,
+      data: undefined,
+    };
+  }
+
+  // Load existing dreams
+  const dreamList = loadDreams();
+
+  // Create new dream
+  const newDream: Dream = {
+    id: generateId(undefined, dreamList),
+    name: name.trim(),
+    theme: theme.trim(),
+    isChecked: isChecked,
+  };
+
+  // Add to list and save
+  dreamList.push(newDream);
+  const saveSuccess = dreamStorage.save(dreamList);
+
+  if (!saveSuccess) {
+    return { isValid: false, errors: { general: "Failed to save dream." } };
+  }
+
+  logger.info(`Added dream with id ${newDream.id}`);
+  return {
+    isValid: true,
+    errors: {},
+    data: newDream,
+  };
+}
+
+/**
+ * Deletes a dream by ID.
+ * @param id The ID of the dream to delete
+ * @returns Success status
+ */
+export function deleteDream(id: number): boolean {
+  const dreamList = loadDreams();
   const index = dreamList.findIndex((dream) => dream.id === id);
 
   if (index === -1) {
-    throw new Error("Matching index not found in dream list.");
+    return false;
   }
-  return index;
-}
 
-/**
- * Adds a new dream to the dream list.
- * @param name The name string of the new dream
- * @param theme The theme string of the new dream
- */
-export function addDream(name: string, theme: string): void {
-  const dreamList = loadDreams();
-
-  const newId = generateId(undefined, dreamList);
-  dreamList.push({
-    id: newId,
-    name: name,
-    theme: theme,
-    isChecked: false,
-  });
-
-  const saveSuccess = dreamStorage.save(dreamList);
-  if (!saveSuccess) throw new Error("Could not save updated dream list.");
-}
-
-/**
- * Removes a dream from the dream list by ID.
- * @param id The ID of the dream to delete
- * @throws Error when dream list is not found in storage or dream ID doesn't exist
- */
-export function deleteDream(id: number): void {
-  const dreamList = loadDreams();
-
-  const index = getDreamIndex(dreamList, id);
   dreamList.splice(index, 1);
-
-  const saveSuccess = dreamStorage.save(dreamList);
-  if (!saveSuccess) throw new Error("Could not save updated dream list.");
+  return dreamStorage.save(dreamList);
 }
 
 /**
- * Updates the checked status of a dream by ID.
- * @param id The ID of the dream to update
- * @param isChecked The new checked status
- * @throws Error when dream list is not found in storage or dream ID doesn't exist
+ * Updates dream checked status.
+ * @param id ID of the dream to update
+ * @param isChecked New checked status
+ * @returns Success status
  */
-export function toggleDreamChecked(id: number, isChecked: boolean): void {
+export function updateDreamChecked(id: number, isChecked: boolean): boolean {
   const dreamList = loadDreams();
+  const dream = dreamList.find((dream) => dream.id === id);
 
-  const index = getDreamIndex(dreamList, id);
-  dreamList[index].isChecked = isChecked;
+  if (!dream) {
+    return false;
+  }
 
-  const saveSuccess = dreamStorage.save(dreamList);
-  if (!saveSuccess) throw new Error("Could not save updated dream list.");
+  dream.isChecked = isChecked;
+  return dreamStorage.save(dreamList);
 }

@@ -1,6 +1,6 @@
 import { getRequiredElement } from "../utils/domHelpers.js";
 import { displayUsername } from "../ui/displayUsername.js";
-import { deleteDream, toggleDreamChecked } from "../services/dreamService.js";
+import { deleteDream, updateDreamChecked } from "../services/dreamService.js";
 import { renderDreams } from "../ui/renderList.js";
 import { redirectIfNotLoggedIn } from "../services/authService.js";
 import { getLogger } from "../utils/logger.js";
@@ -42,7 +42,7 @@ function handleDreamToggle(
   const previousState = !isChecked;
 
   try {
-    toggleDreamChecked(dreamId, isChecked);
+    updateDreamChecked(dreamId, isChecked);
     logger.info(
       `Dream ${dreamId} toggled to ${isChecked ? "checked" : "unchecked"}`
     );
