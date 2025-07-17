@@ -4,7 +4,7 @@ import { togglePassword } from "../ui/togglePassword.js";
 import { saveMockDreams } from "../constants/mockData.js";
 import { getLogger } from "../utils/logger.js";
 import { saveDefaultThemes } from "../services/themeService.js";
-import { displayError } from "../ui/displayError.js";
+import { clearError, displayError } from "../ui/displayError.js";
 import { clearDreams } from "../services/dreamService.js";
 
 /**
@@ -133,14 +133,8 @@ function displayLoginErrors(
  * Clears all login error messages and resets validation states.
  */
 function clearLoginErrors(): void {
-  usernameError.classList.add("hidden");
-  passwordError.classList.add("hidden");
-  usernameError.textContent = "";
-  passwordError.textContent = "";
-
-  // Reset ARIA attributes
-  usernameInput.removeAttribute("aria-invalid");
-  passwordInput.removeAttribute("aria-invalid");
+  clearError(usernameInput, usernameError);
+  clearError(passwordInput, passwordError);
 }
 
 /**

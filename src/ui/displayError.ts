@@ -20,3 +20,17 @@ export function displayError(error: unknown, errorContainer?: HTMLElement) {
     alert(message);
   }
 }
+
+/**
+ * Clears error message and resets validation state for given parameters.
+ * @param input HTML Input element to be reset
+ * @param error HTML Paragraph element to be cleared
+ */
+export function clearError(
+  input: HTMLInputElement,
+  error: HTMLParagraphElement
+): void {
+  error.classList.add("hidden");
+  error.textContent = "";
+  input.removeAttribute("aria-invalid");
+}
