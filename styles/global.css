@@ -107,3 +107,7 @@ figure {
 .hidden {
   display: none;
 }
+
+.bg-secondary-blue {
+  background-color: var(--secondary-blue);
+}

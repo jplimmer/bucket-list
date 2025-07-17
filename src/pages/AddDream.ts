@@ -13,9 +13,9 @@ const logger = getLogger();
 let addDreamForm: HTMLFormElement;
 let dreamInput: HTMLInputElement;
 let themeSelect: HTMLSelectElement;
+let submitButton: HTMLButtonElement;
 let dreamError: HTMLParagraphElement;
 let themeError: HTMLParagraphElement;
-const promptOption = "-- Välj ett tema --";
 
 // State management variable to prevent multiple submits
 let isSubmitting = false;
@@ -30,12 +30,10 @@ function populateThemes(container: HTMLSelectElement) {
     return;
   }
 
-  // Prepend prompt option
-  themes.unshift(promptOption);
-
   // Populate themeSelect
   try {
-    populateDropdown(themeSelect, themes);
+    const prompt = "-- Välj ett tema --";
+    populateDropdown(themeSelect, themes, prompt);
   } catch (error) {
     logger.error("Failed to populate themeSelect:", error);
     displayError(
@@ -51,10 +49,6 @@ function handleAddDreamSubmit(e: Event): void {
   if (isSubmitting) return;
 
   isSubmitting = true;
-  const submitButton = getRequiredElement<HTMLButtonElement>(
-    'button[type="submit"]',
-    addDreamForm
-  );
 
   try {
     // Disable submit button during request
@@ -64,10 +58,11 @@ function handleAddDreamSubmit(e: Event): void {
     clearAddDreamErrors();
 
     // Validate theme is chosen
-    if (themeSelect.value === promptOption) {
+    if (themeSelect.value === "prompt") {
       displayAddDreamErrors({
         dreamTheme: "Vänligen välj ett tema för din dröm.",
       });
+      themeSelect.focus();
       return;
     }
 
@@ -78,20 +73,23 @@ function handleAddDreamSubmit(e: Event): void {
     } else {
       // Display success message in submit button temporarily
       submitButton.textContent = "Dröm tillagd!";
+      submitButton.classList.add("bg-secondary-blue");
+
+      // Focus on dream input for next dream
+      dreamInput.value = "";
+      themeSelect.selectedIndex = 0;
+      dreamInput.focus();
+
+      // Re-enable submit button after timeout
       setTimeout(() => {
-        submitButton.textContent = "Lägg till";
+        resetSubmitButton();
       }, 2000);
     }
   } catch (error) {
     logger.error("Create Dream error:", error);
+    resetSubmitButton();
   } finally {
     isSubmitting = false;
-
-    // Re-enable submit button
-    if (submitButton) {
-      submitButton.disabled = false;
-      submitButton.textContent = "Lägg till";
-    }
   }
 }
 
@@ -104,6 +102,9 @@ function displayAddDreamErrors(
   errors: Record<string, string>,
   suggestion?: string
 ): void {
+  // Reset submit button
+  resetSubmitButton();
+
   // Clear previous errors
   clearAddDreamErrors();
 
@@ -136,6 +137,15 @@ function clearAddDreamErrors(): void {
 }
 
 /**
+ * Resets submit button to initial state
+ */
+function resetSubmitButton(): void {
+  submitButton.disabled = false;
+  submitButton.textContent = "Lägg till";
+  submitButton.classList.remove("bg-secondary-blue");
+}
+
+/**
  * Initialises AddDream page with username display, dropdown and event listener.
  */
 function initialiseAddDreamPage(): void {
@@ -146,6 +156,10 @@ function initialiseAddDreamPage(): void {
   addDreamForm = getRequiredElement<HTMLFormElement>("#add-dream");
   dreamInput = getRequiredElement<HTMLInputElement>("#dream");
   themeSelect = getRequiredElement<HTMLSelectElement>("#dream-select");
+  submitButton = getRequiredElement<HTMLButtonElement>(
+    'button[type="submit"]',
+    addDreamForm
+  );
   dreamError = getRequiredElement<HTMLParagraphElement>("#dream-error-message");
   themeError = getRequiredElement<HTMLParagraphElement>("#theme-error-message");
 
