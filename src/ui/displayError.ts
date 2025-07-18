@@ -16,6 +16,7 @@ export function displayError(error: unknown, errorContainer?: HTMLElement) {
 
   if (errorContainer) {
     errorContainer.textContent = message;
+    errorContainer.classList.remove("hidden");
   } else {
     alert(message);
   }
@@ -27,7 +28,7 @@ export function displayError(error: unknown, errorContainer?: HTMLElement) {
  * @param error HTML Paragraph element to be cleared
  */
 export function clearError(
-  input: HTMLInputElement,
+  input: HTMLElement,
   error: HTMLParagraphElement
 ): void {
   error.classList.add("hidden");

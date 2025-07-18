@@ -1,6 +1,7 @@
 import { ValidationResult } from "../models/common.js";
 import {
   loadUsername,
+  logOut,
   redirectIfNotLoggedIn,
   updateUsername,
 } from "../services/authService.js";
@@ -9,7 +10,6 @@ import { displayError, clearError } from "../ui/displayError.js";
 import { renderThemes } from "../ui/renderList.js";
 import { getRequiredElement } from "../utils/domHelpers.js";
 import { getLogger } from "../utils/logger.js";
-import { clearAllStorage } from "../utils/storage.js";
 
 const logger = getLogger();
 
@@ -222,8 +222,11 @@ function resetThemeButton(): void {
 /**
  * Clears all storage data and loads login page.
  */
-function logOut(): void {
-  clearAllStorage();
+function handleLogOut(): void {
+  const success = logOut();
+  if (!success) {
+    displayError("Problem logging out, please try again.");
+  }
   window.location.replace("./login.html");
 }
 
@@ -264,7 +267,7 @@ function initialiseSettingsPage(): void {
   themeUl.addEventListener("click", handleThemeListClick);
   themeForm.addEventListener("submit", handleAddThemeSubmit);
   const logOutButton = getRequiredElement<HTMLButtonElement>(".logout");
-  logOutButton.addEventListener("click", logOut);
+  logOutButton.addEventListener("click", handleLogOut);
 }
 
 // Entry point: renders themes and sets up event listeners

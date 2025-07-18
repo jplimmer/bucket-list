@@ -6,6 +6,7 @@ import { getLogger } from "../utils/logger.js";
 import { saveDefaultThemes } from "../services/themeService.js";
 import { clearError, displayError } from "../ui/displayError.js";
 import { clearDreams } from "../services/dreamService.js";
+import { setUseLocalStorage } from "../utils/storage.js";
 
 /**
  * Login page controller - handles form submission and password toggle.
@@ -19,6 +20,7 @@ let usernameInput: HTMLInputElement;
 let passwordInput: HTMLInputElement;
 let usernameError: HTMLParagraphElement;
 let passwordError: HTMLParagraphElement;
+let rememberCheckBox: HTMLInputElement;
 
 // State management variable to prevent multiple submits
 let isSubmitting = false;
@@ -98,6 +100,14 @@ function handlePasswordToggle(e: MouseEvent): void {
 }
 
 /**
+ * Handles remember user checkbox clicks
+ * @param e Click event
+ */
+function handleRememberUserToggle(e: Event): void {
+  setUseLocalStorage(rememberCheckBox.checked);
+}
+
+/**
  * Displays login validation errors and applies username suggestion if available.
  * @param errors Object containing field-specific error messages
  * @param suggestion Optional suggested username to replace invalid input
@@ -119,7 +129,7 @@ function displayLoginErrors(
   if (errors.password) {
     passwordError.textContent = errors.password;
     passwordError.classList.remove("hidden");
-    usernameInput.setAttribute("aria-invalid", "true");
+    passwordInput.setAttribute("aria-invalid", "true");
   }
 
   // Apply username suggestion if available
@@ -154,12 +164,16 @@ function initialiseLoginPage(): void {
   passwordError = getRequiredElement<HTMLParagraphElement>(
     "#password-error-message"
   );
+  rememberCheckBox = getRequiredElement<HTMLInputElement>("#remember");
 
   // Add form submission handler
   loginForm.addEventListener("submit", handleLoginSubmit);
 
   // Add password toggle handler
   loginForm.addEventListener("click", handlePasswordToggle);
+
+  // Add remember user toggle handler
+  rememberCheckBox.addEventListener("change", handleRememberUserToggle);
 }
 
 // Entry point: sets up DOM elements and event listeners

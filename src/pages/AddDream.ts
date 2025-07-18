@@ -1,7 +1,7 @@
 import { redirectIfNotLoggedIn } from "../services/authService.js";
 import { createDream } from "../services/dreamService.js";
 import { displayUsername } from "../ui/displayUsername.js";
-import { displayError } from "../ui/displayError.js";
+import { clearError, displayError } from "../ui/displayError.js";
 import { getRequiredElement } from "../utils/domHelpers.js";
 import { getLogger } from "../utils/logger.js";
 import { populateDropdown } from "../ui/populateDropdown.js";
@@ -134,14 +134,8 @@ function displayAddDreamErrors(
  * Clears all AddDream error messages and resets validation states.
  */
 function clearAddDreamErrors(): void {
-  dreamError.classList.add("hidden");
-  themeError.classList.add("hidden");
-  dreamError.textContent = "";
-  themeError.textContent = "";
-
-  // Reset ARIA attributes
-  dreamInput.removeAttribute("aria-invalid");
-  themeSelect.removeAttribute("aria-invalid");
+  clearError(dreamInput, dreamError);
+  clearError(themeSelect, themeError);
 }
 
 /**

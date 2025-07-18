@@ -1,11 +1,7 @@
-/** Storage type for persisting user data. */
-export const STORAGE_CONFIG = {
-  /** Type of storage to use for saving data. */
-  STORAGE_TYPE: sessionStorage,
-} as const;
-
 /** Storage keys for persisting user data. */
 export const STORAGE_KEYS = {
+  /** Storage key for storage type preference. */
+  STORAGE_TYPE: "storageType",
   /** Storage key for username. */
   USERNAME: "username",
   /** Storage key for dreams list. */

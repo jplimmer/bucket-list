@@ -3,12 +3,12 @@ import { ERROR_MESSAGES } from "../constants/errorMessages.js";
 import { CreateResult, ValidationResult } from "../models/common.js";
 import { getLogger } from "../utils/logger.js";
 import { sanitiseInput } from "../utils/sanitiseInput.js";
-import { userStorage } from "../utils/storage.js";
+import { clearAllStorage, userStorage } from "../utils/storage.js";
 
 const logger = getLogger();
 
 /**
- * WRedirects to login page if no user is currently logged in.
+ * Redirects to login page if no user is currently logged in.
  */
 export function redirectIfNotLoggedIn(): void {
   logger.debug("Checking if user logged in...");
@@ -187,7 +187,7 @@ export function createNewUser(
     };
   } else {
     // Clear username if successfully saved.
-    userStorage.clear();
+    clearUsername();
     return {
       isValid: false,
       errors: {
@@ -197,4 +197,17 @@ export function createNewUser(
       suggestion: saveUsername.suggestion,
     };
   }
+}
+
+/**
+ * Clears all storage data.
+ * @returns Success status
+ */
+export function logOut(): boolean {
+  const clearSuccess = clearAllStorage();
+  if (!clearSuccess) {
+    return false;
+  }
+  logger.info("Cleared all storage data");
+  return true;
 }
