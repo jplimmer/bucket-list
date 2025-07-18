@@ -20,6 +20,7 @@ let themeSelect: HTMLSelectElement;
 let submitButton: HTMLButtonElement;
 let dreamError: HTMLParagraphElement;
 let themeError: HTMLParagraphElement;
+let statusDiv: HTMLDivElement;
 
 // State management variable to prevent multiple submits
 let isSubmitting = false;
@@ -82,6 +83,7 @@ function handleAddDreamSubmit(e: SubmitEvent): void {
       // Display success message in submit button temporarily
       submitButton.textContent = "Dröm tillagd!";
       submitButton.classList.add("bg-secondary-blue");
+      statusDiv.textContent = "Dröm tillagd!";
 
       // Focus on dream input for next dream
       dreamInput.value = "";
@@ -118,14 +120,12 @@ function displayAddDreamErrors(
 
   // Display field-specific errors
   if (errors.dreamName) {
-    dreamError.textContent = errors.dreamName;
-    dreamError.classList.remove("hidden");
+    displayError(errors.dreamName, dreamError);
     dreamInput.setAttribute("aria-invalid", "true");
   }
 
   if (errors.dreamTheme) {
-    themeError.textContent = errors.dreamTheme;
-    themeError.classList.remove("hidden");
+    displayError(errors.dreamTheme, themeError);
     themeSelect.setAttribute("aria-invalid", "true");
   }
 }
@@ -164,6 +164,7 @@ function initialiseAddDreamPage(): void {
   );
   dreamError = getRequiredElement<HTMLParagraphElement>("#dream-error-message");
   themeError = getRequiredElement<HTMLParagraphElement>("#theme-error-message");
+  statusDiv = getRequiredElement<HTMLDivElement>("#submit-status");
 
   // Display username in header
   const usernameSpan = getRequiredElement<HTMLSpanElement>("#user-name");

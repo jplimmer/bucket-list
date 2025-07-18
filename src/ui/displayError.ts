@@ -16,7 +16,19 @@ export function displayError(error: unknown, errorContainer?: HTMLElement) {
 
   if (errorContainer) {
     errorContainer.textContent = message;
-    errorContainer.classList.remove("hidden");
+    errorContainer.classList.remove("visually-hidden");
+
+    if (!errorContainer.getAttribute("role")) {
+      errorContainer.setAttribute("role", "alert");
+    }
+
+    if (!errorContainer.getAttribute("aria-live")) {
+      errorContainer.setAttribute("aria-live", "polite");
+    }
+
+    if (!errorContainer.getAttribute("aria-atomic")) {
+      errorContainer.setAttribute("aria-atomic", "true");
+    }
   } else {
     alert(message);
   }
@@ -31,7 +43,7 @@ export function clearError(
   input: HTMLElement,
   error: HTMLParagraphElement
 ): void {
-  error.classList.add("hidden");
+  error.classList.add("visually-hidden");
   error.textContent = "";
   input.removeAttribute("aria-invalid");
 }

@@ -12,6 +12,9 @@ const logger = getLogger();
  * Dashboard page controller - manages dream list interactions and user display.
  */
 
+// Placeholders for elements shared between functions
+let statusDiv: HTMLDivElement;
+
 /**
  * Handles dream deletion with error handling.
  * @param container HTML element where dreams are rendered
@@ -20,6 +23,7 @@ const logger = getLogger();
 function handleDreamDeletion(container: HTMLElement, dreamId: number): void {
   try {
     deleteDream(dreamId);
+    statusDiv.textContent = `Dröm ${dreamId} bortagen!`;
     renderDreams(container);
   } catch (error) {
     logger.error(`Error deleting dream ${dreamId}:`, error);
@@ -42,6 +46,9 @@ function handleDreamToggle(
 
   try {
     updateDreamChecked(dreamId, isChecked);
+    statusDiv.textContent = `Dröm ${dreamId} markerad som ${
+      isChecked ? "slutförd" : "inte slutförd"
+    }!`;
   } catch (error) {
     logger.error(`Error toggling dream ${dreamId}:`, error);
 
@@ -100,6 +107,9 @@ function handleDreamListClick(e: MouseEvent): void {
 function initialiseDashboardPage(): void {
   // Redirect if not logged in
   redirectIfNotLoggedIn();
+
+  // Find and set shared elements for module
+  statusDiv = getRequiredElement<HTMLDivElement>("#update-status");
 
   // Display username in header
   const usernameSpan = getRequiredElement<HTMLSpanElement>("#user-name");

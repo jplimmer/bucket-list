@@ -121,14 +121,12 @@ function displayLoginErrors(
 
   // Display field-specific errors
   if (errors.username) {
-    usernameError.textContent = errors.username;
-    usernameError.classList.remove("hidden");
+    displayError(errors.username, usernameError);
     usernameInput.setAttribute("aria-invalid", "true");
   }
 
   if (errors.password) {
-    passwordError.textContent = errors.password;
-    passwordError.classList.remove("hidden");
+    displayError(errors.password, passwordError);
     passwordInput.setAttribute("aria-invalid", "true");
   }
 

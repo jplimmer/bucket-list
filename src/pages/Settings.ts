@@ -27,6 +27,7 @@ let themeForm: HTMLFormElement;
 let themeInput: HTMLInputElement;
 let themeButton: HTMLButtonElement;
 let themeError: HTMLParagraphElement;
+let statusDiv: HTMLDivElement;
 
 // State management variable to prevent multiple submits
 let isSubmitting = false;
@@ -59,6 +60,7 @@ function handleUsernameSubmit(e: SubmitEvent): void {
       // Display success message in name button temporarily
       nameButton.textContent = "Sparat!";
       nameButton.classList.add("bg-secondary-blue");
+      statusDiv.textContent = "Användarnamn sparat!";
 
       // Re-enable name button after timeout
       setTimeout(() => {
@@ -147,6 +149,7 @@ function handleAddThemeSubmit(e: SubmitEvent) {
       // Display success message in theme button temporarily
       themeButton.textContent = "Sparat!";
       themeButton.classList.add("bg-secondary-blue");
+      statusDiv.textContent = "Teman tillagd!";
 
       // Re-enable theme button after timeout
       setTimeout(() => {
@@ -170,8 +173,7 @@ function displayNameError({ errors, suggestion }: ValidationResult): void {
   resetNameButton();
 
   if (errors.username) {
-    nameError.textContent = errors.username;
-    nameError.classList.remove("hidden");
+    displayError(errors.username, nameError);
     nameInput.setAttribute("aria-invalid", "true");
   }
 
@@ -190,8 +192,7 @@ function displayThemeError({ errors, suggestion }: ValidationResult): void {
   resetThemeButton();
 
   if (errors.theme) {
-    themeError.textContent = errors.theme;
-    themeError.classList.remove("hidden");
+    displayError(errors.theme, themeError);
     themeInput.setAttribute("aria-invalid", "true");
   }
 
@@ -255,6 +256,7 @@ function initialiseSettingsPage(): void {
     themeForm
   );
   themeError = getRequiredElement<HTMLParagraphElement>("#theme-error-message");
+  statusDiv = getRequiredElement<HTMLDivElement>("#submit-status");
 
   // Display username in name input element
   nameInput.value = loadUsername();

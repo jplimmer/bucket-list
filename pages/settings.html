@@ -48,7 +48,13 @@
           Spara
         </button>
       </form>
-      <p id="username-error-message" class="error-message hidden" role="alert">
+      <p
+        id="username-error-message"
+        class="error-message visually-hidden"
+        role="alert"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         Vänligen ange ditt användarnamn.
       </p>
       <h2>Drömteman</h2>
@@ -84,9 +90,16 @@
           Lägg till
         </button>
       </form>
-      <p id="theme-error-message" class="error-message hidden" role="alert">
+      <p
+        id="theme-error-message"
+        class="error-message visually-hidden"
+        role="alert"
+        aria-live="polite"
+        aria-atomic="true"
+      >
         Vänligen ange ditt tema.
       </p>
+      <div id="submit-status" aria-live="polite" class="visually-hidden"></div>
       <button type="button" class="logout">Logga ut</button>
     </main>
   </body>
