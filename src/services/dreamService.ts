@@ -33,13 +33,13 @@ export function loadDreams(): Dream[] {
  */
 function validateDreamInput(name: string, theme: string): ValidationResult {
   const errors: Record<string, string> = {};
-  let suggestion: string | undefined;
+  let suggestion: Record<string, string> | undefined;
 
   // Validate name
   const nameCheck = sanitiseInput(name);
   if (!nameCheck.isSafe) {
     errors.dreamName = nameCheck.issues.join("\n");
-    suggestion = nameCheck.sanitisedInput;
+    suggestion = { dreamName: nameCheck.sanitisedInput };
   }
 
   // Validate theme exists
@@ -50,7 +50,7 @@ function validateDreamInput(name: string, theme: string): ValidationResult {
   return {
     isValid: Object.keys(errors).length === 0,
     errors,
-    suggestion,
+    suggestions: suggestion,
   };
 }
 

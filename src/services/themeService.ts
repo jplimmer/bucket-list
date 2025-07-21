@@ -40,13 +40,13 @@ export function themeExists(theme: string): boolean {
  */
 function validateThemeInput(theme: string): ValidationResult {
   const errors: Record<string, string> = {};
-  let suggestion: string | undefined;
+  let suggestion: Record<string, string> | undefined;
 
   // Sanitise input
   const sanitisation = sanitiseInput(theme);
   if (!sanitisation.isSafe) {
     errors.theme = sanitisation.issues.join("\n");
-    suggestion = sanitisation.sanitisedInput;
+    suggestion = { theme: sanitisation.sanitisedInput };
   }
 
   // Ensure theme doesn't already exist
@@ -54,13 +54,13 @@ function validateThemeInput(theme: string): ValidationResult {
     errors.theme = [errors.theme, "Theme already exists."]
       .filter(Boolean)
       .join("\n");
-    suggestion = "";
+    suggestion = undefined;
   }
 
   return {
     isValid: Object.keys(errors).length === 0,
     errors,
-    suggestion,
+    suggestions: suggestion,
   };
 }
 

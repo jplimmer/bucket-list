@@ -90,13 +90,13 @@ export function updateUsername(username: string): UsernameResult {
  */
 export function validateUsername(username: string): ValidationResult {
   const errors: Record<string, string> = {};
-  let suggestion: string | undefined;
+  let suggestion: Record<string, string> | undefined;
 
   // Sanitise input
   const sanitisation = sanitiseInput(username);
   if (!sanitisation.isSafe) {
     errors.username = sanitisation.issues.join("\n");
-    suggestion = sanitisation.sanitisedInput;
+    suggestion = { username: sanitisation.sanitisedInput };
   }
 
   const cleanUsername = sanitisation.sanitisedInput;
@@ -112,13 +112,13 @@ export function validateUsername(username: string): ValidationResult {
     errors.username = [errors.username, ERROR_MESSAGES.CONTAINS_SPACES]
       .filter(Boolean)
       .join("\n");
-    suggestion = cleanUsername.replace(/\s/g, "_");
+    suggestion = { username: cleanUsername.replace(/\s/g, "_") };
   }
 
   return {
     isValid: Object.keys(errors).length === 0,
     errors,
-    suggestion,
+    suggestions: suggestion,
   };
 }
 
@@ -194,7 +194,7 @@ export function createNewUser(
         username: saveUsername.errors.username,
         password: passwordValidation.errors.password,
       },
-      suggestion: saveUsername.suggestion,
+      suggestions: saveUsername.suggestions,
     };
   }
 }
