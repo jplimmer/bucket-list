@@ -71,3 +71,7 @@ button.toggle-password {
   width: unset;
   background-color: unset;
 }
+
+.btn-success {
+  background-color: var(--secondary-blue);
+}

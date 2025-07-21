@@ -104,7 +104,3 @@ figure {
   white-space: nowrap;
   border: 0;
 }
-
-.bg-secondary-blue {
-  background-color: var(--secondary-blue);
-}
