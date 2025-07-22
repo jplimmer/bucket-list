@@ -5,10 +5,7 @@ import { sanitiseInput } from "./sanitiseInput.js";
 
 const logger = getLogger();
 
-// Storage variable for persisting user data, initialised based on user preference.
-let storage: Storage;
-
-// Define storage schema for type safety
+/** Defines storage schema for type safety */
 interface StorageSchema {
   [STORAGE_KEYS.STORAGE_TYPE]: string;
   [STORAGE_KEYS.USERNAME]: string;
@@ -16,7 +13,10 @@ interface StorageSchema {
   [STORAGE_KEYS.THEMES]: string[];
 }
 
-/** Toggle between local and session storage */
+// Storage variable for persisting user data, initialised based on user preference.
+let storage: Storage;
+
+/** Toggles between local and session storage */
 export function setUseLocalStorage(useLocal: boolean): void {
   storage = useLocal ? localStorage : sessionStorage;
   localStorage.setItem(
@@ -24,6 +24,12 @@ export function setUseLocalStorage(useLocal: boolean): void {
     useLocal ? "local" : "session"
   );
   logger.info(`Switched to ${useLocal ? "localStorage" : "sessionStorage"}`);
+}
+
+/** Checks whether current storage type is localStorage. */
+export function getUseLocalStorage(): boolean {
+  const storedType = localStorage.getItem(STORAGE_KEYS.STORAGE_TYPE);
+  return storedType === "local";
 }
 
 /**

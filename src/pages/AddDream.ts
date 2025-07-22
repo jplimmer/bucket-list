@@ -16,11 +16,11 @@ import { getRequiredElement } from "../utils/domHelpers.js";
 import { getLogger } from "../utils/logger.js";
 import { validateDreamForm } from "../validation/dreamValidation.js";
 
-const logger = getLogger();
-
 /**
  * AddDream page controller - manages adding of new dreams and user display.
  */
+
+const logger = getLogger();
 
 /**
  * Populates theme select element with themes from storage and a prompt option.

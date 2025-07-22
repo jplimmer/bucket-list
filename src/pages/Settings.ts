@@ -17,11 +17,11 @@ import { renderThemes } from "../ui/renderList.js";
 import { getRequiredElement } from "../utils/domHelpers.js";
 import { getLogger } from "../utils/logger.js";
 
-const logger = getLogger();
-
 /**
  * Settings page controller - manages username and theme list interactions.
  */
+
+const logger = getLogger();
 
 /**
  * Elements needed for the settings page functionality.
