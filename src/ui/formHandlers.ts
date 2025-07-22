@@ -61,7 +61,7 @@ export function createFormSubmitHandler(
       if (!result.isValid) {
         handleValidationError(result, elements);
       } else {
-        handleSuccess(elements.buttonConfig, elements.announcer);
+        handleSuccess(elements);
         if (onSuccess) onSuccess();
         if (onCleanup) {
           onCleanup(
@@ -86,18 +86,22 @@ export function createFormSubmitHandler(
 /**
  * Handles button and optional announcer updates on successful form submission.
  */
-function handleSuccess(
-  buttonConfig: ButtonConfig,
-  announcer?: HTMLElement
-): void {
+function handleSuccess(elements: FormElements): void {
+  const { inputs, buttonConfig, announcer } = elements;
+
+  // Update button display
   const { button, texts, classes } = buttonConfig;
   button.textContent = texts.success;
   button.classList.add(classes.success);
+  setTimeout(() => resetButton(buttonConfig), 2000);
+
+  // Update screen-reader announcer
   if (announcer) {
     announcer.textContent = texts.success;
   }
 
-  setTimeout(() => resetButton(buttonConfig), 2000);
+  // Set focus to first input field
+  inputs[Object.keys(inputs)[0]].element.focus();
 }
 
 /**

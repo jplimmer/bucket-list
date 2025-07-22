@@ -1,4 +1,3 @@
-import { ValidationResult } from "../models/common.js";
 import { FormElements } from "../models/formUI.js";
 import {
   loadUsername,
@@ -6,12 +5,8 @@ import {
   redirectIfNotLoggedIn,
   updateUsername,
 } from "../services/authService.js";
-import {
-  createTheme,
-  deleteTheme,
-  saveDefaultThemes,
-} from "../services/themeService.js";
-import { displayError, clearError } from "../ui/displayError.js";
+import { createTheme, deleteTheme } from "../services/themeService.js";
+import { displayError } from "../ui/displayError.js";
 import { createFormSubmitHandler } from "../ui/formHandlers.js";
 import {
   createButtonConfig,
@@ -207,10 +202,16 @@ function setupThemeForm(
   themeFormElements.form.addEventListener("submit", themeHandler);
 }
 
+/**
+ * Sets up theme list button click handling.
+ */
 function setupThemeList(themeList: HTMLUListElement): void {
   themeList.addEventListener("click", handleThemeListClick);
 }
 
+/**
+ * Sets up logout button click handling.
+ */
 function setupLogout(): void {
   const logOutButton = getRequiredElement<HTMLButtonElement>(".logout");
   logOutButton.addEventListener("click", handleLogOut);
