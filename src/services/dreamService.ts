@@ -1,10 +1,9 @@
-import { ValidationResult, CreateResult } from "../models/common.js";
+import { CreateResult, ValidationResult } from "../models/common.js";
 import { Dream } from "../models/domain.js";
 import { generateId } from "../utils/generateId.js";
 import { getLogger } from "../utils/logger.js";
-import { sanitiseInput } from "../utils/sanitiseInput.js";
 import { dreamStorage } from "../utils/storage.js";
-import { validateExistingTheme } from "./themeService.js";
+import { validateDreamForm } from "../validation/dreamValidation.js";
 
 const logger = getLogger();
 
@@ -29,25 +28,36 @@ export function loadDreams(): Dream[] {
 }
 
 /**
- * Validates dream creation inputs.
+ * Checks if a dream with the specified name exists in current dream list from storage (case-insensitive).
+ * Optionally checks for a matching theme as well.
  */
-function validateDreamInputs(name: string, theme: string): ValidationResult {
-  const errors: Record<string, string> = {};
-  let suggestions: Record<string, string> | undefined;
+function dreamExists(name: string, theme?: string): boolean {
+  const dreamList = loadDreams();
 
-  // Sanitise name input
-  const sanitisation = sanitiseInput(name);
-  const cleanDreamName = sanitisation.sanitisedInput;
+  return dreamList.some((dream) => {
+    const nameMatches = dream.name.toLowerCase() === name.toLowerCase();
+    const themeMatches =
+      !theme || dream.theme.toLowerCase() === theme.toLowerCase(); // short-circuits if theme is undefined
 
-  if (!sanitisation.isSafe) {
-    errors.dream = sanitisation.issues.join("\n");
-    suggestions = { dream: cleanDreamName };
-  }
+    // Both conditions must be true
+    return nameMatches && themeMatches;
+  });
+}
 
-  // Validate theme exists
-  const validation = validateExistingTheme(theme);
-  if (!validation.isValid) {
-    errors.theme = validation.errors.theme;
+/**
+ * Validates dream creation input.
+ */
+function validateNewDream(name: string, theme: string): ValidationResult {
+  const validation = validateDreamForm(name, theme);
+  const errors = { ...validation.errors }; // shallow copy
+  let suggestions: Record<string, string> | undefined = {
+    ...validation.suggestions,
+  };
+
+  // If validated, ensure dream doesn't already exist (in any category)
+  if (validation.isValid && dreamExists(name)) {
+    errors.dream = "Dream already exists.";
+    suggestions = undefined;
   }
 
   return {
@@ -72,7 +82,7 @@ export function createDream(
   isChecked: boolean = false
 ): CreateDreamResult {
   // Validate input
-  const validation = validateDreamInputs(name, theme);
+  const validation = validateNewDream(name, theme);
   if (!validation.isValid) {
     return {
       ...validation,
@@ -86,8 +96,8 @@ export function createDream(
   // Create new dream
   const newDream: Dream = {
     id: generateId(undefined, dreamList),
-    name: name.trim(),
-    theme: theme.trim(),
+    name: name,
+    theme: theme,
     isChecked: isChecked,
   };
 

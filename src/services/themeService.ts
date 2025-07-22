@@ -30,9 +30,8 @@ export function loadThemes(): string[] {
  * Checks theme string exists in current theme list from storage (case-insensitive).
  */
 export function themeExists(theme: string): boolean {
-  const normalisedTheme = theme.toLowerCase();
-  const themeList = loadThemes().map((t) => t.toLowerCase());
-  return themeList.includes(normalisedTheme);
+  const themeList = loadThemes();
+  return themeList.some((t) => t.toLowerCase() === theme.toLowerCase());
 }
 
 export function validateExistingTheme(theme: string): ValidationResult {
