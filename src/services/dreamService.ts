@@ -4,7 +4,7 @@ import { generateId } from "../utils/generateId.js";
 import { getLogger } from "../utils/logger.js";
 import { sanitiseInput } from "../utils/sanitiseInput.js";
 import { dreamStorage } from "../utils/storage.js";
-import { themeExists } from "./themeService.js";
+import { validateExistingTheme } from "./themeService.js";
 
 const logger = getLogger();
 
@@ -29,22 +29,25 @@ export function loadDreams(): Dream[] {
 }
 
 /**
- * Validates dream creation input.
+ * Validates dream creation inputs.
  */
-function validateDreamInput(name: string, theme: string): ValidationResult {
+function validateDreamInputs(name: string, theme: string): ValidationResult {
   const errors: Record<string, string> = {};
   let suggestion: Record<string, string> | undefined;
 
-  // Validate name
-  const nameCheck = sanitiseInput(name);
-  if (!nameCheck.isSafe) {
-    errors.dreamName = nameCheck.issues.join("\n");
-    suggestion = { dreamName: nameCheck.sanitisedInput };
+  // Sanitise name input
+  const sanitisation = sanitiseInput(name);
+  const cleanDreamName = sanitisation.sanitisedInput;
+
+  if (!sanitisation.isSafe) {
+    errors.dream = sanitisation.issues.join("\n");
+    suggestion = { dreamName: cleanDreamName };
   }
 
   // Validate theme exists
-  if (!themeExists(theme)) {
-    errors.dreamTheme = "Theme does not exist.";
+  const validation = validateExistingTheme(theme);
+  if (!validation.isValid) {
+    errors.theme = validation.errors.theme;
   }
 
   return {
@@ -69,7 +72,7 @@ export function createDream(
   isChecked: boolean = false
 ): CreateDreamResult {
   // Validate input
-  const validation = validateDreamInput(name, theme);
+  const validation = validateDreamInputs(name, theme);
   if (!validation.isValid) {
     return {
       ...validation,

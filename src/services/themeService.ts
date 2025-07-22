@@ -35,10 +35,33 @@ export function themeExists(theme: string): boolean {
   return themeList.includes(normalisedTheme);
 }
 
+export function validateExistingTheme(theme: string): ValidationResult {
+  const errors: Record<string, string> = {};
+
+  // Sanitise theme input
+  const sanitisation = sanitiseInput(theme);
+  if (!sanitisation.isSafe) {
+    errors.theme = "Potentially malicious theme selected.";
+  }
+
+  // Check selected option is not the prompt option
+  if (theme === "prompt") {
+    errors.theme = "Please select a theme.";
+  } else if (!themeExists(theme)) {
+    // Check theme exists
+    errors.theme = "Theme does not exist.";
+  }
+
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors,
+  };
+}
+
 /**
  * Validates theme creation input.
  */
-function validateThemeInput(theme: string): ValidationResult {
+function validateNewTheme(theme: string): ValidationResult {
   const errors: Record<string, string> = {};
   let suggestion: Record<string, string> | undefined;
 
@@ -73,7 +96,7 @@ type CreateThemeResult = CreateResult<string>;
  */
 export function createTheme(theme: string): CreateThemeResult {
   // Validate input
-  const validation = validateThemeInput(theme);
+  const validation = validateNewTheme(theme);
   if (!validation.isValid) {
     return {
       ...validation,
