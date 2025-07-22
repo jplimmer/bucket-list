@@ -1,8 +1,8 @@
 import { defaultThemes } from "../constants/dreamThemes.js";
 import { CreateResult, ValidationResult } from "../models/common.js";
 import { getLogger } from "../utils/logger.js";
-import { sanitiseInput } from "../utils/sanitiseInput.js";
 import { themeStorage } from "../utils/storage.js";
+import { validateThemeInput } from "../validation/themeValidation.js";
 
 const logger = getLogger();
 
@@ -36,19 +36,11 @@ export function themeExists(theme: string): boolean {
 }
 
 export function validateExistingTheme(theme: string): ValidationResult {
-  const errors: Record<string, string> = {};
+  const validation = validateThemeInput(theme);
+  const errors = { ...validation.errors }; // shallow copy
 
-  // Sanitise theme input
-  const sanitisation = sanitiseInput(theme);
-  if (!sanitisation.isSafe) {
-    errors.theme = "Potentially malicious theme selected.";
-  }
-
-  // Check selected option is not the prompt option
-  if (theme === "prompt") {
-    errors.theme = "Please select a theme.";
-  } else if (!themeExists(theme)) {
-    // Check theme exists
+  // If validated, check theme exists
+  if (validation.isValid && !themeExists(theme)) {
     errors.theme = "Theme does not exist.";
   }
 
@@ -62,28 +54,22 @@ export function validateExistingTheme(theme: string): ValidationResult {
  * Validates theme creation input.
  */
 function validateNewTheme(theme: string): ValidationResult {
-  const errors: Record<string, string> = {};
-  let suggestion: Record<string, string> | undefined;
+  const validation = validateThemeInput(theme);
+  const errors = { ...validation.errors }; // shallow copy
+  let suggestions: Record<string, string> | undefined = {
+    ...validation.suggestions,
+  };
 
-  // Sanitise input
-  const sanitisation = sanitiseInput(theme);
-  if (!sanitisation.isSafe) {
-    errors.theme = sanitisation.issues.join("\n");
-    suggestion = { theme: sanitisation.sanitisedInput };
-  }
-
-  // Ensure theme doesn't already exist
-  if (themeExists(sanitisation.sanitisedInput)) {
-    errors.theme = [errors.theme, "Theme already exists."]
-      .filter(Boolean)
-      .join("\n");
-    suggestion = undefined;
+  // If validated, ensure theme doesn't already exist
+  if (validation.isValid && themeExists(theme)) {
+    errors.theme = "Theme already exists.";
+    suggestions = undefined;
   }
 
   return {
     isValid: Object.keys(errors).length === 0,
     errors,
-    suggestions: suggestion,
+    suggestions: suggestions,
   };
 }
 
