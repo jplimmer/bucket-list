@@ -1,3 +1,4 @@
+import { BUTTON_ACTIONS } from "../constants/globalConfig.js";
 import { FormElements } from "../models/formUI.js";
 import {
   loadUsername,
@@ -76,7 +77,7 @@ function handleThemeListClick(e: MouseEvent): void {
   const action = btn.dataset.action;
 
   switch (action) {
-    case "delete-theme":
+    case BUTTON_ACTIONS.DELETE_THEME:
       handleThemeDeletion(container, theme);
       break;
 

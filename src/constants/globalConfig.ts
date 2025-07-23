@@ -14,3 +14,10 @@ export const ASSETS_CONFIG = {
     EYE_SLASH: `${iconsRoot}eye-slash-icon.svg`,
   },
 } as const;
+
+/** `dataset.action` values for buttons. */
+export const BUTTON_ACTIONS = {
+  DELETE_DREAM: "delete-dream",
+  TOGGLE_CHECK: "toggle-check",
+  DELETE_THEME: "delete-theme",
+} as const;
