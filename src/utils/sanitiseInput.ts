@@ -1,4 +1,5 @@
 import { INPUT_MAX_LENGTH } from "../constants/globalConfig.js";
+import { SANITISATION_MESSAGES } from "../constants/messages.js";
 
 /**
  * Result object returned by input sanitisation operations.
@@ -36,7 +37,7 @@ export function sanitiseInput(raw: string): SanitisationResult {
       isSafe: false,
       originalInput: raw,
       sanitisedInput: "",
-      issues: ["Input cannot be empty."],
+      issues: [SANITISATION_MESSAGES.EMPTY],
     };
   }
 
@@ -45,14 +46,14 @@ export function sanitiseInput(raw: string): SanitisationResult {
 
   // Check for script tags
   if (/<script[^>]*>[\s\S]*?<\/script>/gi.test(sanitised)) {
-    issues.push("Script tags detected and must be removed.");
+    issues.push(SANITISATION_MESSAGES.SCRIPT);
     sanitised = sanitised.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "");
     hasMaliciousContent = true;
   }
 
   // Check for other HTML tags
   if (/<\/?[^>]+(>|$)/g.test(sanitised)) {
-    issues.push("HTML tags detected and must be removed.");
+    issues.push(SANITISATION_MESSAGES.HTML_TAGS);
     sanitised = sanitised.replace(/<\/?[^>]+(>|$)/g, "");
     hasMaliciousContent = true;
   }
@@ -62,14 +63,12 @@ export function sanitiseInput(raw: string): SanitisationResult {
   sanitised = sanitised.trim();
 
   if (beforeTrim !== sanitised) {
-    issues.push("Leading or trailing whitespace trimmed.");
+    issues.push(SANITISATION_MESSAGES.TRIM_WHITESPACE);
   }
 
   // Check length
   if (sanitised.length > INPUT_MAX_LENGTH) {
-    issues.push(
-      `Input too long (${sanitised.length} chars) and truncated to ${INPUT_MAX_LENGTH} characters.`
-    );
+    issues.push(SANITISATION_MESSAGES.INPUT_TOO_LONG(sanitised.length));
     sanitised = sanitised.slice(0, INPUT_MAX_LENGTH);
   }
 

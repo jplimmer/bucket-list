@@ -1,4 +1,15 @@
 import { AUTH_CONFIG } from "./authConfig.js";
+import { INPUT_MAX_LENGTH } from "./globalConfig.js";
+
+/** User-facing messages for sanitisation functionality. */
+export const SANITISATION_MESSAGES = {
+  EMPTY: "Fältet får inte vara tomt.",
+  SCRIPT: "Script upptäcktes och måste tas bort.",
+  HTML_TAGS: "HTML-taggar upptäcktes och måste tas bort.",
+  TRIM_WHITESPACE: "Inledande eller avslutande mellanslag togs bort.",
+  INPUT_TOO_LONG: (actualLength: number) =>
+    `Inmatningen var för lång (${actualLength} tecken) och har förkortats till ${INPUT_MAX_LENGTH} tecken.`,
+} as const;
 
 /** User-facing messages for authentication functionality. */
 export const AUTH_MESSAGES = {
@@ -53,7 +64,7 @@ export const DREAM_MESSAGES = {
     /** Error shown when dream 'checked' toggle fails. */
     NOT_TOGGLED: "Drömmen kunde inte (av)bockas.",
   },
-};
+} as const;
 
 /** User-facing messages for theme functionality. */
 export const THEME_MESSAGES = {
@@ -75,4 +86,4 @@ export const THEME_MESSAGES = {
     /** Error shown when theme deletion fails. */
     NOT_DELETED: "Temat kunde inte tas bort.",
   },
-};
+} as const;
