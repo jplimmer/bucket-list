@@ -1,19 +1,35 @@
-import {
-  STORAGE_CONFIG,
-  STORAGE_KEYS,
-  StorageKey,
-} from "../constants/storageConfig.js";
+import { STORAGE_KEYS, StorageKey } from "../constants/storageConfig.js";
 import { Dream } from "../models/domain.js";
 import { getLogger } from "./logger.js";
 import { sanitiseInput } from "./sanitiseInput.js";
 
 const logger = getLogger();
 
-// Define storage schema for type safety
+/** Defines storage schema for type safety */
 interface StorageSchema {
+  [STORAGE_KEYS.STORAGE_TYPE]: string;
   [STORAGE_KEYS.USERNAME]: string;
   [STORAGE_KEYS.DREAMS]: Dream[];
   [STORAGE_KEYS.THEMES]: string[];
+}
+
+// Storage variable for persisting user data, initialised based on user preference.
+let storage: Storage;
+
+/** Toggles between local and session storage */
+export function setUseLocalStorage(useLocal: boolean): void {
+  storage = useLocal ? localStorage : sessionStorage;
+  localStorage.setItem(
+    STORAGE_KEYS.STORAGE_TYPE,
+    useLocal ? "local" : "session"
+  );
+  logger.info(`Switched to ${useLocal ? "localStorage" : "sessionStorage"}`);
+}
+
+/** Checks whether current storage type is localStorage. */
+export function getUseLocalStorage(): boolean {
+  const storedType = localStorage.getItem(STORAGE_KEYS.STORAGE_TYPE);
+  return storedType === "local";
 }
 
 /**
@@ -22,10 +38,10 @@ interface StorageSchema {
  */
 export function clearAllStorage(): boolean {
   try {
-    STORAGE_CONFIG.STORAGE_TYPE.clear();
+    storage.clear();
     return true;
   } catch (error) {
-    logger.error(`Failed to clear ${STORAGE_CONFIG.STORAGE_TYPE}:`, error);
+    logger.error(`Failed to clear storage:`, error);
     return false;
   }
 }
@@ -59,7 +75,7 @@ function saveToStorage<K extends StorageKey>(
     }
 
     // Save to storage as JSON
-    STORAGE_CONFIG.STORAGE_TYPE.setItem(key, JSON.stringify(storageValue));
+    storage.setItem(key, JSON.stringify(storageValue));
     return true;
   } catch (error) {
     logger.error(`Failed to save ${key}:`, error);
@@ -75,7 +91,7 @@ function saveToStorage<K extends StorageKey>(
  */
 function getFromStorage<K extends StorageKey>(key: K): StorageSchema[K] | null {
   try {
-    const storedValue = STORAGE_CONFIG.STORAGE_TYPE.getItem(key);
+    const storedValue = storage.getItem(key);
     if (!storedValue) return null;
 
     try {
@@ -84,7 +100,7 @@ function getFromStorage<K extends StorageKey>(key: K): StorageSchema[K] | null {
       logger.error(`Failed to parse stored value for ${key}:`, parseError);
       // Clean up potentially corrupted data
       try {
-        STORAGE_CONFIG.STORAGE_TYPE.removeItem(key);
+        storage.removeItem(key);
       } catch (cleanupError) {
         logger.error(
           `Failed to clean up corrupted data for ${key}:`,
@@ -106,7 +122,7 @@ function getFromStorage<K extends StorageKey>(key: K): StorageSchema[K] | null {
  */
 function removeFromStorage<K extends StorageKey>(key: K): boolean {
   try {
-    STORAGE_CONFIG.STORAGE_TYPE.removeItem(key);
+    storage.removeItem(key);
     return true;
   } catch (error) {
     logger.error(`Failed to remove ${key}:`, error);
@@ -126,6 +142,22 @@ function createStorage<K extends StorageKey>(key: K) {
     clear: () => removeFromStorage(key),
   };
 }
+
+/**
+ * Initialises the storage type based on user preference, to preserve preference across pages.
+ * Defaults to sessionStorage if no preference is saved.
+ */
+function initialseStorage(): void {
+  const storedType = localStorage.getItem(STORAGE_KEYS.STORAGE_TYPE);
+  const useLocal = storedType === "local";
+  storage = useLocal ? localStorage : sessionStorage;
+  logger.debug(
+    `Initialised with ${useLocal ? "localStorage" : "sessionStorage"}`
+  );
+}
+
+// Initialise storage on module load
+initialseStorage();
 
 // Export storage instances for modules to use
 export const userStorage = createStorage(STORAGE_KEYS.USERNAME);

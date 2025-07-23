@@ -1,11 +1,26 @@
-import { getRequiredElement } from "../utils/domHelpers.js";
-import { createNewUser, redirectIfLoggedIn } from "../services/authService.js";
-import { togglePassword } from "../ui/togglePassword.js";
+import { AUTH_MESSAGES } from "../constants/messages.js";
 import { saveMockDreams } from "../constants/mockData.js";
-import { getLogger } from "../utils/logger.js";
-import { saveDefaultThemes } from "../services/themeService.js";
-import { clearError, displayError } from "../ui/displayError.js";
+import { ValidationResult } from "../models/common.js";
+import { FormElements } from "../models/formUI.js";
+import { createNewUser, redirectIfLoggedIn } from "../services/authService.js";
 import { clearDreams } from "../services/dreamService.js";
+import { saveDefaultThemes } from "../services/themeService.js";
+import {
+  createFormSubmitHandler,
+  createButtonConfig,
+  createFormInput,
+} from "../ui/index.js";
+import { togglePassword } from "../ui/togglePassword.js";
+import {
+  getRequiredElement,
+  getLogger,
+  getUseLocalStorage,
+  setUseLocalStorage,
+} from "../utils/index.js";
+import {
+  validatePassword,
+  validateUsername,
+} from "../validation/userValidation.js";
 
 /**
  * Login page controller - handles form submission and password toggle.
@@ -13,73 +28,12 @@ import { clearDreams } from "../services/dreamService.js";
 
 const logger = getLogger();
 
-// Placeholders for elements shared between functions
-let loginForm: HTMLFormElement;
-let usernameInput: HTMLInputElement;
-let passwordInput: HTMLInputElement;
-let usernameError: HTMLParagraphElement;
-let passwordError: HTMLParagraphElement;
-
-// State management variable to prevent multiple submits
-let isSubmitting = false;
-
 /**
- * Handles login form submission with error handling and submission prevention
- * @param e Form submission event
+ * Elements need for the login page functionality.
  */
-async function handleLoginSubmit(e: SubmitEvent): Promise<void> {
-  e.preventDefault();
-
-  // Prevent multiple submissions
-  if (isSubmitting) return;
-
-  isSubmitting = true;
-  const submitButton = getRequiredElement<HTMLButtonElement>(
-    'button[type="submit"]',
-    loginForm
-  );
-
-  try {
-    // Disable submit button during request
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.textContent = "Loggar in...";
-    }
-
-    clearLoginErrors();
-
-    const result = await createNewUser(
-      usernameInput.value,
-      passwordInput.value
-    );
-
-    if (!result.isValid) {
-      displayLoginErrors(result.errors, result.suggestion);
-    } else {
-      // Reset default themes
-      saveDefaultThemes();
-
-      // Reset mock dream list for user
-      if (!clearDreams())
-        throw new Error("Failed to clear dreams from storage.");
-      saveMockDreams();
-
-      // Redirect to dashboard
-      logger.info("User logged in.");
-      window.location.href = "dashboard.html";
-    }
-  } catch (error) {
-    logger.error("Login error:", error);
-    displayError("Login error:" + error);
-  } finally {
-    isSubmitting = false;
-
-    // Re-enable submit button
-    if (submitButton) {
-      submitButton.disabled = false;
-      submitButton.textContent = "Logga in";
-    }
-  }
+interface LoginElements {
+  loginFormElements: FormElements;
+  rememberMeCheckBox: HTMLInputElement;
 }
 
 /**
@@ -98,43 +52,109 @@ function handlePasswordToggle(e: MouseEvent): void {
 }
 
 /**
- * Displays login validation errors and applies username suggestion if available.
- * @param errors Object containing field-specific error messages
- * @param suggestion Optional suggested username to replace invalid input
+ * Creates FormElements configuration for the login form.
  */
-function displayLoginErrors(
-  errors: Record<string, string>,
-  suggestion?: string
-): void {
-  // Clear previous errors
-  clearLoginErrors();
+function createLoginFormElements(): FormElements {
+  const form = getRequiredElement<HTMLFormElement>("form");
+  const usernameInput = getRequiredElement<HTMLInputElement>("#username");
+  const passwordInput = getRequiredElement<HTMLInputElement>("#password");
+  const button = getRequiredElement<HTMLButtonElement>(
+    'button[type="submit"]',
+    form
+  );
+  const usernameError = getRequiredElement<HTMLParagraphElement>(
+    "#username-error-message"
+  );
+  const passwordError = getRequiredElement<HTMLParagraphElement>(
+    "#password-error-message"
+  );
 
-  // Display field-specific errors
-  if (errors.username) {
-    usernameError.textContent = errors.username;
-    usernameError.classList.remove("hidden");
-    usernameInput.setAttribute("aria-invalid", "true");
-  }
-
-  if (errors.password) {
-    passwordError.textContent = errors.password;
-    passwordError.classList.remove("hidden");
-    usernameInput.setAttribute("aria-invalid", "true");
-  }
-
-  // Apply username suggestion if available
-  if (errors.username && suggestion) {
-    usernameInput.value = suggestion;
-    usernameInput.select();
-  }
+  return {
+    form,
+    inputs: {
+      username: createFormInput(usernameInput, usernameError),
+      password: createFormInput(passwordInput, passwordError),
+    },
+    buttonConfig: createButtonConfig(
+      button,
+      AUTH_MESSAGES.BUTTONS.LOGIN_TEXTS,
+      "btn-success"
+    ),
+  };
 }
 
 /**
- * Clears all login error messages and resets validation states.
+ * Initialises all DOM elements required for the login page.
  */
-function clearLoginErrors(): void {
-  clearError(usernameInput, usernameError);
-  clearError(passwordInput, passwordError);
+function initialiseElements(): LoginElements {
+  return {
+    loginFormElements: createLoginFormElements(),
+    rememberMeCheckBox: getRequiredElement<HTMLInputElement>("#remember"),
+  };
+}
+
+/**
+ * Sets up login form submission handling, with UI validation and saving of default dreams and themes.
+ */
+function setupLoginForm(loginFormElements: FormElements): void {
+  function onLoginFormSubmit(
+    formData: Record<string, string>
+  ): ValidationResult {
+    // UI validation before calling the service
+    const usernameResult = validateUsername(formData.username);
+    const passwordResult = validatePassword(formData.password);
+
+    if (!usernameResult.isValid || !passwordResult.isValid) {
+      return {
+        isValid: false,
+        errors: { ...usernameResult.errors, ...passwordResult.errors },
+        suggestions: { ...usernameResult.suggestions },
+      };
+    }
+
+    return createNewUser(formData.username, formData.password);
+  }
+
+  // Create form handler
+  const loginHandler = createFormSubmitHandler(
+    loginFormElements,
+    (formData) => onLoginFormSubmit(formData),
+    () => {
+      // Reset default themes
+      saveDefaultThemes();
+
+      // Reset mock dream list for user
+      clearDreams();
+      saveMockDreams();
+
+      // Redirect to dashboard
+      logger.info("User logged in.");
+      window.location.href = "dashboard.html";
+    }
+  );
+
+  // Add event listener with form handler
+  loginFormElements.form.addEventListener("submit", loginHandler);
+}
+
+/**
+ * Sets up password toggle click handling.
+ */
+function setupPasswordToggle(form: HTMLFormElement): void {
+  form.addEventListener("click", handlePasswordToggle);
+}
+
+/**
+ * Sets up 'remember me' click handling.
+ */
+function setupRememberMe(checkbox: HTMLInputElement): void {
+  // Updates storage type in local storage.
+  function handleRememberMeToggle(e: Event): void {
+    setUseLocalStorage(checkbox.checked);
+  }
+
+  // Add event listener
+  checkbox.addEventListener("change", handleRememberMeToggle);
 }
 
 /**
@@ -145,21 +165,15 @@ function initialiseLoginPage(): void {
   redirectIfLoggedIn();
 
   // Find and set shared elements for module
-  loginForm = getRequiredElement<HTMLFormElement>("form");
-  usernameInput = getRequiredElement<HTMLInputElement>("#username");
-  passwordInput = getRequiredElement<HTMLInputElement>("#password");
-  usernameError = getRequiredElement<HTMLParagraphElement>(
-    "#username-error-message"
-  );
-  passwordError = getRequiredElement<HTMLParagraphElement>(
-    "#password-error-message"
-  );
+  const elements = initialiseElements();
 
-  // Add form submission handler
-  loginForm.addEventListener("submit", handleLoginSubmit);
+  // Set up login form handler and add events listeners
+  setupLoginForm(elements.loginFormElements);
+  setupPasswordToggle(elements.loginFormElements.form);
+  setupRememberMe(elements.rememberMeCheckBox);
 
-  // Add password toggle handler
-  loginForm.addEventListener("click", handlePasswordToggle);
+  // Set 'remember me' checkbox to current storage state (guard, should always be false)
+  elements.rememberMeCheckBox.checked = getUseLocalStorage();
 }
 
 // Entry point: sets up DOM elements and event listeners

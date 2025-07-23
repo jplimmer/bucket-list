@@ -26,7 +26,7 @@
         src="https://picsum.photos/id/823/175/175"
         alt="Användarens profilbild"
       />
-      <p>Fortsätt drömma, <span id="user-name">NAMN</span>!</p>
+      <p>Fortsätt drömma<span id="user-name">NAMN</span>!</p>
     </header>
     <main>
       <h2>Lägg till en ny dröm</h2>
@@ -39,7 +39,13 @@
           aria-describedby="dream-error-message"
           autofocus
         />
-        <p id="dream-error-message" class="error-message hidden" role="alert">
+        <p
+          id="dream-error-message"
+          class="error-message visually-hidden"
+          role="alert"
+          aria-live="polite"
+          aria-atomic="true"
+        >
           Vänligen ange vad du drömmer om.
         </p>
         <label for="dream-select">Tema:</label>
@@ -51,10 +57,21 @@
           <option value="">-- Välj ett tema --</option>
           <!-- Select options replaced here with Typescript -->
         </select>
-        <p id="theme-error-message" class="error-message hidden" role="alert">
+        <p
+          id="theme-error-message"
+          class="error-message visually-hidden"
+          role="alert"
+          aria-live="polite"
+          aria-atomic="true"
+        >
           Vänligen välj ett tema för din dröm.
         </p>
         <button type="submit">Lägg till</button>
+        <div
+          id="submit-status"
+          aria-live="polite"
+          class="visually-hidden"
+        ></div>
       </form>
     </main>
   </body>

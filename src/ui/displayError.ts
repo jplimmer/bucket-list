@@ -16,6 +16,19 @@ export function displayError(error: unknown, errorContainer?: HTMLElement) {
 
   if (errorContainer) {
     errorContainer.textContent = message;
+    errorContainer.classList.remove("visually-hidden");
+
+    if (!errorContainer.getAttribute("role")) {
+      errorContainer.setAttribute("role", "alert");
+    }
+
+    if (!errorContainer.getAttribute("aria-live")) {
+      errorContainer.setAttribute("aria-live", "polite");
+    }
+
+    if (!errorContainer.getAttribute("aria-atomic")) {
+      errorContainer.setAttribute("aria-atomic", "true");
+    }
   } else {
     alert(message);
   }
@@ -24,13 +37,10 @@ export function displayError(error: unknown, errorContainer?: HTMLElement) {
 /**
  * Clears error message and resets validation state for given parameters.
  * @param input HTML Input element to be reset
- * @param error HTML Paragraph element to be cleared
+ * @param error HTML element containing error to be cleared
  */
-export function clearError(
-  input: HTMLInputElement,
-  error: HTMLParagraphElement
-): void {
-  error.classList.add("hidden");
+export function clearError(input: HTMLElement, error: HTMLElement): void {
+  error.classList.add("visually-hidden");
   error.textContent = "";
   input.removeAttribute("aria-invalid");
 }

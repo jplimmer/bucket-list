@@ -1,156 +1,107 @@
+import { DREAM_MESSAGES, THEME_MESSAGES } from "../constants/messages.js";
+import { ValidationResult } from "../models/common.js";
+import { FormElements } from "../models/formUI.js";
 import { redirectIfNotLoggedIn } from "../services/authService.js";
 import { createDream } from "../services/dreamService.js";
+import { loadThemes } from "../services/themeService.js";
 import { displayUsername } from "../ui/displayUsername.js";
 import { displayError } from "../ui/displayError.js";
-import { getRequiredElement } from "../utils/domHelpers.js";
-import { getLogger } from "../utils/logger.js";
+import {
+  createFormSubmitHandler,
+  createButtonConfig,
+  createFormInput,
+  resetInputs,
+} from "../ui/index.js";
 import { populateDropdown } from "../ui/populateDropdown.js";
-import { loadThemes } from "../services/themeService.js";
-
-const logger = getLogger();
+import { getRequiredElement, getLogger } from "../utils/index.js";
+import { validateDreamForm } from "../validation/dreamValidation.js";
 
 /**
  * AddDream page controller - manages adding of new dreams and user display.
  */
 
-// Placeholders for elements shared between functions
-let addDreamForm: HTMLFormElement;
-let dreamInput: HTMLInputElement;
-let themeSelect: HTMLSelectElement;
-let submitButton: HTMLButtonElement;
-let dreamError: HTMLParagraphElement;
-let themeError: HTMLParagraphElement;
+const logger = getLogger();
 
-// State management variable to prevent multiple submits
-let isSubmitting = false;
-
+/**
+ * Populates theme select element with themes from storage and a prompt option.
+ */
 function populateThemes(container: HTMLSelectElement) {
   // Get themes
   const themes = loadThemes();
   if (!themes) {
-    displayError(
-      "Inga teman hittades, lägg till ett tema i inställningarna för att komma igång!"
-    );
+    displayError(THEME_MESSAGES.ERROR.NO_THEMES_FOUND);
     return;
   }
 
   // Populate themeSelect
   try {
     const prompt = "-- Välj ett tema --";
-    populateDropdown(themeSelect, themes, prompt);
+    populateDropdown(container, themes, prompt);
   } catch (error) {
     logger.error("Failed to populate themeSelect:", error);
-    displayError(
-      "There was an issue loading your dream themes, please refresh the page."
-    );
+    displayError(THEME_MESSAGES.ERROR.NO_THEMES_DISPLAYED);
   }
 }
 
 /**
- * Handles add dream submission with error handling and submission prevention.
- * @param e Form submission event
+ * Creates FormElements configuration for the add-dream form.
  */
-function handleAddDreamSubmit(e: SubmitEvent): void {
-  e.preventDefault();
+function createAddDreamFormElements(): FormElements {
+  const form = getRequiredElement<HTMLFormElement>("#add-dream");
+  const dreamInput = getRequiredElement<HTMLInputElement>("#dream");
+  const themeSelect = getRequiredElement<HTMLSelectElement>("#dream-select");
+  const button = getRequiredElement<HTMLButtonElement>(
+    'button[type="submit"]',
+    form
+  );
+  const dreamError = getRequiredElement<HTMLParagraphElement>(
+    "#dream-error-message"
+  );
+  const themeError = getRequiredElement<HTMLParagraphElement>(
+    "#theme-error-message"
+  );
 
-  // Prevent multiple submissions
-  if (isSubmitting) return;
+  const statusDiv = getRequiredElement<HTMLDivElement>("#submit-status");
 
-  isSubmitting = true;
-
-  try {
-    // Disable submit button during request
-    submitButton.disabled = true;
-    submitButton.textContent = "Lägger till din dröm...";
-
-    clearAddDreamErrors();
-
-    // Validate theme is chosen
-    if (themeSelect.value === "prompt") {
-      displayAddDreamErrors({
-        dreamTheme: "Vänligen välj ett tema för din dröm.",
-      });
-      themeSelect.focus();
-      return;
-    }
-
-    const result = createDream(dreamInput.value, themeSelect.value);
-
-    if (!result.isValid) {
-      displayAddDreamErrors(result.errors, result.suggestion);
-    } else {
-      // Display success message in submit button temporarily
-      submitButton.textContent = "Dröm tillagd!";
-      submitButton.classList.add("bg-secondary-blue");
-
-      // Focus on dream input for next dream
-      dreamInput.value = "";
-      themeSelect.selectedIndex = 0;
-      dreamInput.focus();
-
-      // Re-enable submit button after timeout
-      setTimeout(() => {
-        resetSubmitButton();
-      }, 2000);
-    }
-  } catch (error) {
-    logger.error("Create Dream error:", error);
-    resetSubmitButton();
-  } finally {
-    isSubmitting = false;
-  }
+  return {
+    form,
+    inputs: {
+      dream: createFormInput(dreamInput, dreamError),
+      theme: createFormInput(themeSelect, themeError),
+    },
+    buttonConfig: createButtonConfig(
+      button,
+      DREAM_MESSAGES.BUTTONS.ADD_DREAM_TEXTS,
+      "btn-success"
+    ),
+    announcer: statusDiv,
+  };
 }
 
 /**
- * Displays AddDream validation errors and applies dream name suggestion if available.
- * @param errors Object containing field-specific error messages
- * @param suggestion Optional suggested dream name to replace invalid input
+ * Sets up add-dream form submission handling, with UI validation and input reset on success.
  */
-function displayAddDreamErrors(
-  errors: Record<string, string>,
-  suggestion?: string
-): void {
-  // Reset submit button
-  resetSubmitButton();
+function setupAddDreamForm(addDreamFormElements: FormElements): void {
+  function onAddDreamSubmit(
+    formData: Record<string, string>
+  ): ValidationResult {
+    // UI validation before calling the service
+    const result = validateDreamForm(formData.dream, formData.theme);
+    if (!result.isValid) return result;
 
-  // Clear previous errors
-  clearAddDreamErrors();
-
-  // Display field-specific errors
-  if (errors.dreamName) {
-    dreamError.textContent = errors.dreamName;
-    dreamError.classList.remove("hidden");
-    dreamInput.setAttribute("aria-invalid", "true");
+    return createDream(formData.dream, formData.theme);
   }
 
-  if (errors.dreamTheme) {
-    themeError.textContent = errors.dreamTheme;
-    themeError.classList.remove("hidden");
-    themeSelect.setAttribute("aria-invalid", "true");
-  }
-}
+  // Create form handler
+  const addDreamHandler = createFormSubmitHandler(
+    addDreamFormElements,
+    (formData) => onAddDreamSubmit(formData),
+    undefined,
+    (inputs) => resetInputs(inputs)
+  );
 
-/**
- * Clears all AddDream error messages and resets validation states.
- */
-function clearAddDreamErrors(): void {
-  dreamError.classList.add("hidden");
-  themeError.classList.add("hidden");
-  dreamError.textContent = "";
-  themeError.textContent = "";
-
-  // Reset ARIA attributes
-  dreamInput.removeAttribute("aria-invalid");
-  themeSelect.removeAttribute("aria-invalid");
-}
-
-/**
- * Resets submit button to initial state
- */
-function resetSubmitButton(): void {
-  submitButton.disabled = false;
-  submitButton.textContent = "Lägg till";
-  submitButton.classList.remove("bg-secondary-blue");
+  // Add event listener with form handler
+  addDreamFormElements.form.addEventListener("submit", addDreamHandler);
 }
 
 /**
@@ -161,25 +112,20 @@ function initialiseAddDreamPage(): void {
   redirectIfNotLoggedIn();
 
   // Find and set shared elements for module
-  addDreamForm = getRequiredElement<HTMLFormElement>("#add-dream");
-  dreamInput = getRequiredElement<HTMLInputElement>("#dream");
-  themeSelect = getRequiredElement<HTMLSelectElement>("#dream-select");
-  submitButton = getRequiredElement<HTMLButtonElement>(
-    'button[type="submit"]',
-    addDreamForm
-  );
-  dreamError = getRequiredElement<HTMLParagraphElement>("#dream-error-message");
-  themeError = getRequiredElement<HTMLParagraphElement>("#theme-error-message");
+  const elements = createAddDreamFormElements();
+
+  // Set up form handler with event listener
+  setupAddDreamForm(elements);
 
   // Display username in header
   const usernameSpan = getRequiredElement<HTMLSpanElement>("#user-name");
   displayUsername(usernameSpan);
 
-  // Populate theme dropdown
-  populateThemes(themeSelect);
-
-  // Add form submit handler
-  addDreamForm.addEventListener("submit", handleAddDreamSubmit);
+  // Populate theme dropdown (with type guard)
+  const themeSelect = elements.inputs.theme.element;
+  if (themeSelect instanceof HTMLSelectElement) {
+    populateThemes(themeSelect);
+  }
 }
 
 // Entry point: populates dropdown and sets up event listeners

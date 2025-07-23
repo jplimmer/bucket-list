@@ -4,7 +4,7 @@
 export interface ValidationResult {
   isValid: boolean;
   errors: Record<string, string>;
-  suggestion?: string;
+  suggestions?: Record<string, string>;
 }
 
 /**

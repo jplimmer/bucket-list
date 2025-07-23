@@ -62,7 +62,7 @@ button.confirm-input {
 
 button.logout {
   background-color: var(--primary-red);
-  margin-top: 4rem;
+  margin-top: 2rem;
 }
 
 button.toggle-password {
@@ -70,4 +70,8 @@ button.toggle-password {
   padding: unset;
   width: unset;
   background-color: unset;
+}
+
+.btn-success {
+  background-color: var(--secondary-blue);
 }

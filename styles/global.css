@@ -100,14 +100,7 @@ figure {
   margin: -1px;
   padding: 0;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
   border: 0;
-}
-
-.hidden {
-  display: none;
-}
-
-.bg-secondary-blue {
-  background-color: var(--secondary-blue);
 }
