@@ -1,4 +1,5 @@
 import { BUTTON_ACTIONS } from "../constants/globalConfig.js";
+import { AUTH_MESSAGES, THEME_MESSAGES } from "../constants/messages.js";
 import { FormElements } from "../models/formUI.js";
 import {
   loadUsername,
@@ -8,15 +9,14 @@ import {
 } from "../services/authService.js";
 import { createTheme, deleteTheme } from "../services/themeService.js";
 import { displayError } from "../ui/displayError.js";
-import { createFormSubmitHandler } from "../ui/formHandlers.js";
 import {
+  createFormSubmitHandler,
   createButtonConfig,
   createFormInput,
   resetInputs,
-} from "../ui/formHelpers.js";
+} from "../ui/index.js";
 import { renderThemes } from "../ui/renderList.js";
-import { getRequiredElement } from "../utils/domHelpers.js";
-import { getLogger } from "../utils/logger.js";
+import { getRequiredElement, getLogger } from "../utils/index.js";
 
 /**
  * Settings page controller - manages username and theme list interactions.
@@ -42,7 +42,7 @@ function handleThemeDeletion(container: HTMLElement, theme: string): void {
   if (deleteTheme(theme)) {
     renderThemes(container);
   } else {
-    displayError("Theme could not be removed.");
+    displayError(THEME_MESSAGES.ERROR.NOT_DELETED);
   }
 }
 
@@ -92,7 +92,7 @@ function handleThemeListClick(e: MouseEvent): void {
 function handleLogOut(): void {
   const success = logOut();
   if (!success) {
-    displayError("Problem logging out, please try again.");
+    displayError(AUTH_MESSAGES.ERROR.LOGOUT);
   }
   window.location.replace("./login.html");
 }
@@ -116,11 +116,7 @@ function createUserFormElements(announcer: HTMLElement): FormElements {
     inputs: { username: createFormInput(input, error) },
     buttonConfig: createButtonConfig(
       button,
-      {
-        original: "Spara",
-        loading: "Sparar...",
-        success: "Sparat!",
-      },
+      AUTH_MESSAGES.BUTTONS.UPDATE_TEXTS,
       "btn-success"
     ),
     announcer: announcer,
@@ -146,11 +142,7 @@ function createThemeFormELements(announcer: HTMLElement): FormElements {
     inputs: { theme: createFormInput(input, error) },
     buttonConfig: createButtonConfig(
       button,
-      {
-        original: "Lägg till",
-        loading: "Sparar...",
-        success: "Tillagd!",
-      },
+      THEME_MESSAGES.BUTTONS.ADD_THEME_TEXTS,
       "btn-success"
     ),
     announcer: announcer,

@@ -1,5 +1,5 @@
 import { AUTH_CONFIG } from "../constants/authConfig.js";
-import { ERROR_MESSAGES } from "../constants/errorMessages.js";
+import { AUTH_MESSAGES } from "../constants/messages.js";
 import { ValidationResult } from "../models/common.js";
 import { sanitiseInput } from "../utils/sanitiseInput.js";
 
@@ -23,13 +23,13 @@ export function validateUsername(username: string): ValidationResult {
 
   // Validate sanitised username according to business logic
   if (cleanUsername.length < AUTH_CONFIG.USERNAME_MIN_LENGTH) {
-    errors.username = [errors.username, ERROR_MESSAGES.USERNAME_TOO_SHORT]
+    errors.username = [errors.username, AUTH_MESSAGES.ERROR.USERNAME_TOO_SHORT]
       .filter(Boolean)
       .join("\n");
   }
   // Check for spaces and replace with underscores
   if (/\s/.test(cleanUsername)) {
-    errors.username = [errors.username, ERROR_MESSAGES.CONTAINS_SPACES]
+    errors.username = [errors.username, AUTH_MESSAGES.ERROR.CONTAINS_SPACES]
       .filter(Boolean)
       .join("\n");
     suggestions = { username: cleanUsername.replace(/\s/g, "_") };
@@ -63,18 +63,21 @@ export function validatePassword(password: string): ValidationResult {
 
   // Validate safe password according to business logic
   if (password.length < AUTH_CONFIG.PASSWORD_MIN_LENGTH) {
-    errors.password = [errors.password, ERROR_MESSAGES.PASSWORD_TOO_SHORT]
+    errors.password = [errors.password, AUTH_MESSAGES.ERROR.PASSWORD_TOO_SHORT]
       .filter(Boolean)
       .join("\n");
   }
   if (AUTH_CONFIG.PASSWORD_MUST_CONTAIN_NUMBER && !/\d/.test(password)) {
-    errors.password = [errors.password, ERROR_MESSAGES.PASSWORD_REQUIRES_NUMBER]
+    errors.password = [
+      errors.password,
+      AUTH_MESSAGES.ERROR.PASSWORD_REQUIRES_NUMBER,
+    ]
       .filter(Boolean)
       .join("\n");
   }
   // Check for spaces and replace with underscores
   if (/\s/.test(password)) {
-    errors.username = [errors.username, ERROR_MESSAGES.CONTAINS_SPACES]
+    errors.username = [errors.username, AUTH_MESSAGES.ERROR.CONTAINS_SPACES]
       .filter(Boolean)
       .join("\n");
   }

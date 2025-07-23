@@ -1,3 +1,4 @@
+import { DREAM_MESSAGES, THEME_MESSAGES } from "../constants/messages.js";
 import { ValidationResult } from "../models/common.js";
 import { FormElements } from "../models/formUI.js";
 import { redirectIfNotLoggedIn } from "../services/authService.js";
@@ -5,15 +6,14 @@ import { createDream } from "../services/dreamService.js";
 import { loadThemes } from "../services/themeService.js";
 import { displayUsername } from "../ui/displayUsername.js";
 import { displayError } from "../ui/displayError.js";
-import { createFormSubmitHandler } from "../ui/formHandlers.js";
 import {
+  createFormSubmitHandler,
   createButtonConfig,
   createFormInput,
   resetInputs,
-} from "../ui/formHelpers.js";
+} from "../ui/index.js";
 import { populateDropdown } from "../ui/populateDropdown.js";
-import { getRequiredElement } from "../utils/domHelpers.js";
-import { getLogger } from "../utils/logger.js";
+import { getRequiredElement, getLogger } from "../utils/index.js";
 import { validateDreamForm } from "../validation/dreamValidation.js";
 
 /**
@@ -29,9 +29,7 @@ function populateThemes(container: HTMLSelectElement) {
   // Get themes
   const themes = loadThemes();
   if (!themes) {
-    displayError(
-      "Inga teman hittades, lägg till ett tema i inställningarna för att komma igång!"
-    );
+    displayError(THEME_MESSAGES.ERROR.NO_THEMES_FOUND);
     return;
   }
 
@@ -41,9 +39,7 @@ function populateThemes(container: HTMLSelectElement) {
     populateDropdown(container, themes, prompt);
   } catch (error) {
     logger.error("Failed to populate themeSelect:", error);
-    displayError(
-      "There was an issue loading your dream themes, please refresh the page."
-    );
+    displayError(THEME_MESSAGES.ERROR.NO_THEMES_DISPLAYED);
   }
 }
 
@@ -75,11 +71,7 @@ function createAddDreamFormElements(): FormElements {
     },
     buttonConfig: createButtonConfig(
       button,
-      {
-        original: "Lägg till",
-        loading: "Lägger till din dröm...",
-        success: "Dröm tillagd!",
-      },
+      DREAM_MESSAGES.BUTTONS.ADD_DREAM_TEXTS,
       "btn-success"
     ),
     announcer: statusDiv,

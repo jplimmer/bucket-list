@@ -1,3 +1,4 @@
+import { DREAM_MESSAGES, THEME_MESSAGES } from "../constants/messages.js";
 import { Dream } from "../models/domain.js";
 import { createDreamListItem, createThemeListItem } from "./createListItem.js";
 import { getLogger } from "../utils/logger.js";
@@ -39,7 +40,7 @@ export function renderDreams(container: HTMLElement): void {
     renderList<Dream>(container, dreamList, createDreamListItem);
   } catch (error) {
     logger.error("Failed to render dreams:", error);
-    displayError("Dreams could not be displayed, try refreshing the page.");
+    displayError(DREAM_MESSAGES.ERROR.NO_DREAMS_DISPLAYED);
   }
 }
 
@@ -54,6 +55,6 @@ export function renderThemes(container: HTMLElement): void {
     renderList<string>(container, themeList, createThemeListItem);
   } catch (error) {
     logger.error("Failed to render themes:", error);
-    displayError("Themes could not be displayed, try refreshing the page.");
+    displayError(THEME_MESSAGES.ERROR.NO_THEMES_DISPLAYED);
   }
 }

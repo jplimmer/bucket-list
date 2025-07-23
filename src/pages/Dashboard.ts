@@ -1,11 +1,11 @@
 import { BUTTON_ACTIONS } from "../constants/globalConfig.js";
-import { getRequiredElement } from "../utils/domHelpers.js";
-import { displayUsername } from "../ui/displayUsername.js";
-import { deleteDream, updateDreamChecked } from "../services/dreamService.js";
-import { renderDreams } from "../ui/renderList.js";
+import { DREAM_MESSAGES } from "../constants/messages.js";
 import { redirectIfNotLoggedIn } from "../services/authService.js";
-import { getLogger } from "../utils/logger.js";
+import { deleteDream, updateDreamChecked } from "../services/dreamService.js";
 import { displayError } from "../ui/displayError.js";
+import { displayUsername } from "../ui/displayUsername.js";
+import { renderDreams } from "../ui/renderList.js";
+import { getRequiredElement, getLogger } from "../utils/index.js";
 
 /**
  * Dashboard page controller - manages dream list interactions and user display.
@@ -31,7 +31,7 @@ function handleDreamDeletion(
     renderDreams(container);
   } catch (error) {
     logger.error(`Error deleting dream ${dreamId}:`, error);
-    displayError("Dream could not be removed.");
+    displayError(DREAM_MESSAGES.ERROR.NOT_DELETED);
   }
 }
 
@@ -61,7 +61,7 @@ function handleDreamToggle(
 
     // Rollback checkbox state
     checkbox.checked = previousState;
-    displayError("Dream could not be (un)checked.");
+    displayError(DREAM_MESSAGES.ERROR.NOT_TOGGLED);
   }
 }
 

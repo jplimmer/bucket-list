@@ -1,4 +1,5 @@
 import { ASSETS_CONFIG } from "../constants/globalConfig.js";
+import { AUTH_MESSAGES } from "../constants/messages.js";
 import { displayError } from "./displayError.js";
 import { getRequiredElement } from "../utils/domHelpers.js";
 import { getLogger } from "../utils/logger.js";
@@ -16,7 +17,7 @@ export function togglePassword(button: HTMLButtonElement): void {
     const passwordInput = findPasswordInput(button);
     if (!passwordInput) {
       logger.error("Associated password input not found for button:", button);
-      displayError("Something went wrong showing the password.");
+      displayError(AUTH_MESSAGES.ERROR.PASSWORD_NOT_SHOWN);
       return;
     }
 
@@ -33,7 +34,7 @@ export function togglePassword(button: HTMLButtonElement): void {
     }
   } catch (error) {
     logger.error("Failed to toggle password visibility:", error);
-    displayError("Something went wrong showing the password.");
+    displayError(AUTH_MESSAGES.ERROR.PASSWORD_NOT_SHOWN);
   }
 }
 

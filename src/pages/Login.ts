@@ -1,15 +1,22 @@
-import { getRequiredElement } from "../utils/domHelpers.js";
-import { createNewUser, redirectIfLoggedIn } from "../services/authService.js";
-import { togglePassword } from "../ui/togglePassword.js";
+import { AUTH_MESSAGES } from "../constants/messages.js";
 import { saveMockDreams } from "../constants/mockData.js";
-import { getLogger } from "../utils/logger.js";
-import { saveDefaultThemes } from "../services/themeService.js";
-import { clearDreams } from "../services/dreamService.js";
-import { getUseLocalStorage, setUseLocalStorage } from "../utils/storage.js";
-import { FormElements } from "../models/formUI.js";
-import { createButtonConfig, createFormInput } from "../ui/formHelpers.js";
-import { createFormSubmitHandler } from "../ui/formHandlers.js";
 import { ValidationResult } from "../models/common.js";
+import { FormElements } from "../models/formUI.js";
+import { createNewUser, redirectIfLoggedIn } from "../services/authService.js";
+import { clearDreams } from "../services/dreamService.js";
+import { saveDefaultThemes } from "../services/themeService.js";
+import {
+  createFormSubmitHandler,
+  createButtonConfig,
+  createFormInput,
+} from "../ui/index.js";
+import { togglePassword } from "../ui/togglePassword.js";
+import {
+  getRequiredElement,
+  getLogger,
+  getUseLocalStorage,
+  setUseLocalStorage,
+} from "../utils/index.js";
 import {
   validatePassword,
   validateUsername,
@@ -70,7 +77,7 @@ function createLoginFormElements(): FormElements {
     },
     buttonConfig: createButtonConfig(
       button,
-      { original: "Logga in", loading: "Loggar in...", success: "Inloggad!" },
+      AUTH_MESSAGES.BUTTONS.LOGIN_TEXTS,
       "btn-success"
     ),
   };
