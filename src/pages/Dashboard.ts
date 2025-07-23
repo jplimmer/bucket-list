@@ -123,16 +123,16 @@ function initialiseDashboardPage(): void {
   // Redirect if not logged in
   redirectIfNotLoggedIn();
 
+  // Add dream-list click handler
+  const dreamUl = getRequiredElement<HTMLUListElement>(".dream-list");
+  dreamUl.addEventListener("click", handleDreamListClick);
+
   // Display username in header
   const usernameSpan = getRequiredElement<HTMLSpanElement>("#user-name");
   displayUsername(usernameSpan);
 
   // Render dream list
-  const dreamUl = getRequiredElement<HTMLUListElement>(".dream-list");
   renderDreams(dreamUl);
-
-  // Add dream-list click handler
-  dreamUl.addEventListener("click", handleDreamListClick);
 }
 
 // Entry point: renders dream list and sets up event listeners
