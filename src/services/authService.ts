@@ -1,6 +1,5 @@
 import { CreateResult, ValidationResult } from "../models/common.js";
-import { getLogger } from "../utils/logger.js";
-import { clearAllStorage, userStorage } from "../utils/storage.js";
+import { getLogger, clearAllStorage, userStorage } from "../utils/index.js";
 import {
   validateUsername,
   validatePassword,

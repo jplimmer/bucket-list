@@ -33,7 +33,7 @@ export function populateDropdown(
  * @param text Text string for prompt option to display
  * @returns HTML Option element with textContent as text input string and value as "prompt"
  */
-export function createDropdownPrompt(text: string): HTMLOptionElement {
+function createDropdownPrompt(text: string): HTMLOptionElement {
   const promptOption = document.createElement("option");
   promptOption.value = "prompt";
   promptOption.textContent = text;

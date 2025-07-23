@@ -1,7 +1,6 @@
 import { defaultThemes } from "../constants/dreamThemes.js";
 import { CreateResult, ValidationResult } from "../models/common.js";
-import { getLogger } from "../utils/logger.js";
-import { themeStorage } from "../utils/storage.js";
+import { getLogger, themeStorage } from "../utils/index.js";
 import { validateThemeInput } from "../validation/themeValidation.js";
 
 const logger = getLogger();

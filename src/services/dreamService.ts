@@ -1,8 +1,6 @@
 import { CreateResult, ValidationResult } from "../models/common.js";
 import { Dream } from "../models/domain.js";
-import { generateId } from "../utils/generateId.js";
-import { getLogger } from "../utils/logger.js";
-import { dreamStorage } from "../utils/storage.js";
+import { generateId, getLogger, dreamStorage } from "../utils/index.js";
 import { validateDreamForm } from "../validation/dreamValidation.js";
 
 const logger = getLogger();
