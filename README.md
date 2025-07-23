@@ -72,7 +72,8 @@ npx tsc
 │       ├── dreamService.ts
 │       └── themeService.ts
 │   ├── ui/
-│   └── utils/
+│   ├── utils/
+│   └── validation/
 ├── styles/
 │   └── (css styles)
 ├── .gitignore
