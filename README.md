@@ -8,19 +8,19 @@ This project is a frontend Typescript exercise focused on DOM manipulation, inte
     <tr>
         <td width="25%" valign="top">
             <i>Login:</i><br>
-            <img src="assets/screenshots/login_original.png" width="100%">
+            <img src="assets/screenshots/login.png" width="100%">
         </td>
         <td width="25%" valign="top">
             <i>Dashboard:</i><br>
-            <img src="assets/screenshots/dashboard_original.png" width="100%">
+            <img src="assets/screenshots/dashboard.png" width="100%">
         </td>
         <td width="25%" valign="top">
             <i>Add dream:</i><br>
-            <img src="assets/screenshots/addDream_original.png" width="100%">
+            <img src="assets/screenshots/addDream.png" width="100%">
         </td>
         <td width="25%" valign="top">
             <i>Settings:</i><br>
-            <img src="assets/screenshots/settings_original.png" width="100%">
+            <img src="assets/screenshots/settings.png" width="100%">
         </td>
     </tr>
 </table>
